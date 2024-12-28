@@ -192,16 +192,20 @@ public class SystemController extends BaseController<User> {
         return "add-illness";
     }
 
-    /**
-     * 添加药品页面
-     */
     @GetMapping("add-medical")
     public String addMedical(Integer id, Map<String, Object> map) {
+        // 检查用户是否登录
         if (Assert.isEmpty(loginUser)) {
             return "redirect:/index.html";
         }
+
+        // 获取所有的疾病信息
         List<Illness> illnesses = illnessService.all();
+
+        // 创建一个空的药品对象
         Medicine medicine = new Medicine();
+
+        // 如果有传入药品ID，则加载该药品信息并关联相关疾病
         if (Assert.notEmpty(id)) {
             medicine = medicineService.get(id);
             for (Illness illness : illnesses) {
@@ -211,10 +215,15 @@ public class SystemController extends BaseController<User> {
                 }
             }
         }
+
+        // 将疾病集合和药品对象放入模型中
         map.put("illnesses", illnesses);
         map.put("medicine", medicine);
+
+        // 返回视图名称
         return "add-medical";
     }
+
 
     /**
      * 疾病管理页面
