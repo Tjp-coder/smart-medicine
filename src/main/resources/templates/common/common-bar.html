@@ -175,43 +175,66 @@
     <a href="#"><i style="color: white;font-size: 40px" class="fa fa-arrow-up"></i></a>
 </div>
 
-<!--智能医生模块的侧边栏-->
+<!-- 智能医生模块的侧边栏 -->
 <div id="dashboard-sidebar" class="dashboard-sidebar">
+    <!-- 用户信息部分 -->
     <div class="profile-sec">
         <div class="author-news mb-3">
             <div class="author-news-content text-center p-3">
+                <!-- 用户头像 -->
                 <div class="author-thumb mt-0">
                     <img th:src="${session.loginUser.imgPath}" alt="author"/>
                 </div>
+                <!-- 用户基本信息 -->
                 <div class="author-content pt-2 p-0">
                     <h3 class="mb-1" th:text="${session.loginUser.userName}"></h3>
-                    <p class="detail"><i class="fa fa-phone"></i> [[${session.loginUser.userTel}]]</p>
-                    <p class="detail"><i class="fa fa-envelope-o"></i> [[${session.loginUser.userEmail}]]</p>
+                    <p class="detail">
+                        <i class="fa fa-phone"></i> [[${session.loginUser.userTel}]]
+                    </p>
+                    <p class="detail">
+                        <i class="fa fa-envelope-o"></i> [[${session.loginUser.userEmail}]]
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard
-        Navigation</a>
+    <!-- 响应式导航触发器 -->
+    <a href="#" class="dashboard-responsive-nav-trigger">
+        <i class="fa fa-reorder"></i> Dashboard Navigation
+    </a>
+
+    <!-- 导航菜单 -->
     <div class="dashboard-nav">
         <div class="dashboard-nav-inner">
             <ul>
+                <!-- 我的资料链接 -->
                 <li th:class="${cur == 'profile' ? 'active': ''}">
                     <a href="profile"><i class="sl sl-icon-user"></i> 我的资料</a>
                 </li>
+
+                <!-- 智能医生链接 -->
                 <li th:class="${cur == 'doctor' ? 'active': ''}">
-                    <a href="doctor"><i class="sl sl-icon-envelope-open"></i>智能医生</a>
+                    <a href="doctor"><i class="sl sl-icon-envelope-open"></i> 智能医生</a>
                 </li>
+
+                <!--角色状态，1代表管理员，0普通用户-->
+                <!-- 疾病管理链接（仅管理员可见） -->
                 <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'illness' ? 'active': ''}">
                     <a href="all-illness"><i class="sl sl-icon-layers"></i> 疾病管理</a>
                 </li>
+
+                <!-- 药品管理链接（仅管理员可见） -->
                 <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'medicine' ? 'active': ''}">
                     <a href="all-medical"><i class="sl sl-icon-layers"></i> 药品管理</a>
                 </li>
+
+                <!-- 反馈管理链接（仅管理员可见） -->
                 <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'feedback' ? 'active': ''}">
                     <a href="all-feedback"><i class="sl sl-icon-layers"></i> 反馈管理</a>
                 </li>
+
+                <!-- 退出登录链接 -->
                 <li>
                     <a href="logout"><i class="sl sl-icon-power"></i> 退出登录</a>
                 </li>
@@ -219,5 +242,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

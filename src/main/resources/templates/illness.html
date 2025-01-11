@@ -31,6 +31,8 @@
 <div th:replace="common/common-bar::#header"></div>
 
 
+
+<!-- 仪表盘区域，展示药品信息 -->
 <div id="dashboard">
     <div class="container">
         <div class="dashboard-main">
@@ -39,11 +41,14 @@
                     <div class="dashboard-content">
                         <div class="dashboard-review single-comments">
                             <div class="comments">
+                                <!-- 标题：显示全部药品或与特定疾病相关的药品 -->
                                 <div style="margin-top: 30px;text-align: center"><h3 th:text="${title eq null}?'全部':('与'+${title}+'相关的药如下')"></h3></div>
+
+                                <!-- 循环展示药品列表 -->
                                 <div class="comment-box d-flex align-items-center justify-content-between" th:each="me:${medicineList}">
                                     <div class="comment-image">
                                         <a th:href="@{findMedicineOne(id=${me.id})}">
-                                        <img th:src="${me.imgPath}" alt="image"/>
+                                            <img th:src="${me.imgPath}" alt="image"/>
                                         </a>
                                     </div>
                                     <div class="comment-content" style="width: 80%;height: 150px">
@@ -53,27 +58,21 @@
                                         <p class="comment-date mb-2" th:text="${me.medicineBrand}+'牌'">April 25, 2019 at 10:46 am</p>
                                         <span class="num-rating white" th:text="${me.medicineType eq 0}?'西药':(${me.medicineType eq 1}?'中药':'中性药')">4.6/5</span>
                                         <span class="comment-title"><i>"是药三分毒，切忌不要乱吃药！"</i></span>
-                                        <p class="comment mt-2" th:text="${me.medicineEffect}">
-                                            Take in the iconic skyline and visit the neighbourhood hangouts that you've
-                                            only ever seen on TV. Take in the iconic skyline and visit
-                                            the neighbourhood.
-                                        </p>
+                                        <p class="comment mt-2" th:text="${me.medicineEffect}">Description</p>
                                     </div>
                                 </div>
+
+                                <!-- 当药品列表为空时，显示默认内容 -->
                                 <div class="comment-box d-flex align-items-center justify-content-between" th:if="${medicineList eq null}">
                                     <div class="comment-image">
                                         <img src="images/team/user-2.jpg" alt="image"/>
                                     </div>
                                     <div class="comment-content">
-                                        <h5 class="m-0" >Helena</h5>
-                                        <p class="comment-date mb-2" >April 25, 2019 at 10:46 am</p>
-                                        <span class="num-rating white" >4.6/5</span>
+                                        <h5 class="m-0">Helena</h5>
+                                        <p class="comment-date mb-2">April 25, 2019 at 10:46 am</p>
+                                        <span class="num-rating white">4.6/5</span>
                                         <span class="comment-title"><i>"是药三分毒，切忌不要乱吃药！"</i></span>
-                                        <p class="comment mt-2" >
-                                            Take in the iconic skyline and visit the neighbourhood hangouts that you've
-                                            only ever seen on TV. Take in the iconic skyline and visit
-                                            the neighbourhood.
-                                        </p>
+                                        <p class="comment mt-2">Description</p>
                                     </div>
                                 </div>
                             </div>
@@ -82,9 +81,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
 
 <section class="search-list-sh p-0">
     <div class="container">

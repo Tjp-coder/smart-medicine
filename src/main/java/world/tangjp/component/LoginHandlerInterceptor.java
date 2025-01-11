@@ -2,6 +2,7 @@ package world.tangjp.component;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import world.tangjp.entity.User;
+import world.tangjp.utils.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,13 +20,13 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         User user = (User) request.getSession().getAttribute("loginUser");
-        if (user == null) {
-            //未登录,返回登录页面
+        // 如果用户未登录，重定向到首页
+        if (Assert.isEmpty(user)) {
             response.sendRedirect("/");
             return false;
-        } else {
-            //已登录,放行
-            return true;
         }
+
+        // 用户已登录，允许继续访问
+        return true;
     }
 }

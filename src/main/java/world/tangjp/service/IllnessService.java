@@ -70,7 +70,6 @@ public class IllnessService extends BaseService<Illness> {
     }
 
     public Map<String, Object> findIllness(Integer kind, String illnessName, Integer page) {
-
         Map<String, Object> map = new HashMap<>(4);
         QueryWrapper<Illness> illnessQueryWrapper = new QueryWrapper<>();
         if (Assert.notEmpty(illnessName)) {
@@ -142,9 +141,7 @@ public class IllnessService extends BaseService<Illness> {
                 }
             });
             map.put("medicine", list);
-
         }
-
         return map;
     }
 

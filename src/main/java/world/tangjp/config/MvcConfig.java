@@ -48,17 +48,21 @@ public class MvcConfig implements WebMvcConfigurer, ErrorPageRegistrar {
     /**
      * 注册登录拦截器
      */
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginHandlerInterceptor())
-//                // 拦截的请求
-//                .addPathPatterns("/**")
-//                // 不拦截的请求（放行）
-//                .excludePathPatterns(
-//                        "/","/index","/index.html","/join.html","/home","/material","/materials","/admin/**",
-//                        "/login","/register",
-//                        "/error400Page","/error401Page","/error404Page","/error500Page",
-//                        "/**/front/**", "/asserts/**","/**/*.css", "/**/*.js", "/**/*.png ",
-//                        "/**/*.jpg", "/**/*.jpeg","/**/*.gif", "/**/fonts/*", "/**/*.svg");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 注册拦截器并指定需要拦截的路径
+        registry.addInterceptor(new LoginHandlerInterceptor())
+                .addPathPatterns("/doctor", "/all-feedback", "/profile", "/add-illness",
+                        "/add-medical", "/all-illness", "/all-medical")
+                .excludePathPatterns(
+                        "/",
+                        "/index.html",
+                        "/logout",
+                        "/findIllness",
+                        "/findIllnessOne",
+                        "/findMedicineOne",
+                        "/findMedicines",
+                        "/globalSelect"); // 排除无需验证的路径
+    }
+
 }

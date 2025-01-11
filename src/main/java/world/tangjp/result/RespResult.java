@@ -1,4 +1,4 @@
-package world.tangjp.dto;
+package world.tangjp.result;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;

@@ -32,9 +32,6 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("/doctor")
     public String doctor(Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         return "doctor";
     }
 
@@ -52,9 +49,6 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("/all-feedback")
     public String feedback(Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         List<Feedback> feedbackList = feedbackService.all();
 
         map.put("feedbackList", feedbackList);
@@ -66,44 +60,66 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("/profile")
     public String profile(Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         return "profile";
     }
 
     /**
-     * 查询相关疾病
+     * 查询相关疾病，传入kind分类参数，查找某分类的疾病
+     *
+     * @param map 用于存储数据并传递给前端视图的参数容器
+     * @param kind 疾病分类的ID
+     * @param illnessName 疾病名称的搜索关键字（可选）
+     * @param page 当前分页页码，默认为1
+     * @return 返回前端页面名称"search-illness"
      */
     @GetMapping("findIllness")
     public String findIllness(Map<String, Object> map, Integer kind, String illnessName, Integer page) {
-        // 处理page
+        // 处理分页参数，如果未传入页码，则默认为第一页
         page = ObjectUtils.isEmpty(page) ? 1 : page;
 
+        // 调用服务层方法查询疾病信息，结果存储到 illness Map 中
         Map<String, Object> illness = illnessService.findIllness(kind, illnessName, page);
+
+        // 根据传入的分类参数和疾病名称设置页面的标题信息
         if (Assert.notEmpty(kind)) {
-            map.put("title", illnessKindService.get(kind).getName() + (illnessName == null ? "" : ('"' + illnessName + '"' + "的搜索结果")));
+            // 当kind存在时，设置标题为分类名称 + 搜索结果
+            map.put("title", illnessKindService.get(kind).getName() +
+                    (illnessName == null ? "" : ('"' + illnessName + '"' + "的搜索结果")));
         } else {
+            // 当kind为空时，标题为 "全部" 或 疾病名称的搜索结果
             map.put("title", illnessName == null ? "全部" : ('"' + illnessName + '"' + "的搜索结果"));
         }
+
+        // 如果用户已登录且kind不为空，记录操作历史
         if (loginUser != null && kind != null) {
-            historyService.insetOne(loginUser.getId(), MedicalConstants.TYPE_OPERATE,
-                    illnessKindService.get(kind).getId() + "," + (Assert.isEmpty(illnessName) ? "无" : illnessName));
+            historyService.insetOne(
+                    loginUser.getId(),
+                    MedicalConstants.TYPE_OPERATE,
+                    illnessKindService.get(kind).getId() + "," +
+                            (Assert.isEmpty(illnessName) ? "无" : illnessName)
+            );
         }
+
+        // 如果用户已登录且传入了疾病名称，记录疾病搜索历史
         if (loginUser != null && Assert.notEmpty(illnessName)) {
             historyService.insetOne(loginUser.getId(), MedicalConstants.TYPE_ILLNESS, illnessName);
         }
-        map.putAll(illness);
-        map.put("page", page);
-        map.put("kind", kind);
-        map.put("illnessName", illnessName);
-        map.put("kindList", illnessKindService.findList());
-        map.put("history", loginUser == null ? null : historyService.findList(loginUser.getId()));
+
+        // 将疾病信息和其他参数加入到 map 中，传递给前端页面
+        map.putAll(illness); // 疾病数据
+        map.put("page", page); // 当前页码
+        map.put("kind", kind); // 分类ID
+        map.put("illnessName", illnessName); // 搜索关键字
+        map.put("kindList", illnessKindService.findList()); // 疾病分类列表
+        map.put("history", loginUser == null ? null : historyService.findList(loginUser.getId())); // 历史记录
+
+        // 返回前端页面的名称
         return "search-illness";
     }
 
+
     /**
-     * 查询相关疾病下的药
+     * 查询疾病详情
      */
     @GetMapping("findIllnessOne")
     public String findIllnessOne(Map<String, Object> map, Integer id) {
@@ -117,7 +133,7 @@ public class SystemController extends BaseController<User> {
     }
 
     /**
-     * 查询相关疾病下的药
+     * 查询药品详情
      */
     @GetMapping("findMedicineOne")
     public String findMedicineOne(Map<String, Object> map, Integer id) {
@@ -128,7 +144,7 @@ public class SystemController extends BaseController<User> {
     }
 
     /**
-     * 查询相关疾病下的药
+     * 查找药品
      */
     @GetMapping("findMedicines")
     public String findMedicines(Map<String, Object> map, String nameValue, Integer page) {
@@ -179,9 +195,6 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("add-illness")
     public String addIllness(Integer id, Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         Illness illness = new Illness();
         if (Assert.notEmpty(id)) {
             illness = illnessService.get(id);
@@ -194,11 +207,6 @@ public class SystemController extends BaseController<User> {
 
     @GetMapping("add-medical")
     public String addMedical(Integer id, Map<String, Object> map) {
-        // 检查用户是否登录
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
-
         // 获取所有的疾病信息
         List<Illness> illnesses = illnessService.all();
 
@@ -230,9 +238,6 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("all-illness")
     public String allIllness(Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         List<Illness> illnesses = illnessService.all();
         for (Illness illness : illnesses) {
             illness.setKind(illnessKindService.get(illness.getKindId()));
@@ -246,9 +251,6 @@ public class SystemController extends BaseController<User> {
      */
     @GetMapping("all-medical")
     public String allMedical(Map<String, Object> map) {
-        if (Assert.isEmpty(loginUser)) {
-            return "redirect:/index.html";
-        }
         List<Medicine> medicines = medicineService.all();
         map.put("medicines", medicines);
         return "all-medical";

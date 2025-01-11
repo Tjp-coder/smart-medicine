@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import world.tangjp.component.EmailClient;
-import world.tangjp.dto.RespResult;
+import world.tangjp.result.RespResult;
 import world.tangjp.entity.IllnessKind;
 import world.tangjp.entity.User;
 import world.tangjp.service.*;

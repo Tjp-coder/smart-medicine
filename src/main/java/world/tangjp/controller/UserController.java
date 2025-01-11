@@ -3,7 +3,7 @@ package world.tangjp.controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import world.tangjp.dto.RespResult;
+import world.tangjp.result.RespResult;
 import world.tangjp.entity.User;
 import world.tangjp.utils.Assert;
 

@@ -29,7 +29,7 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
             fallback: false
     valid: 5
-    title: "寻药就医系统 - 用户认证"
+    title: "智慧医药系统 - 用户认证"
     template: "您的动态验证码为：<strong style='color: red'>%s</strong>，%d分钟内有效，若非本人操作，请勿泄露。"
 # 日志配置
 logging:

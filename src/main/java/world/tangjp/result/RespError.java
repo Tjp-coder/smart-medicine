@@ -1,4 +1,4 @@
-package world.tangjp.dto;
+package world.tangjp.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

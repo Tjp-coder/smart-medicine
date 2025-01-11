@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import world.tangjp.component.OssClient;
-import world.tangjp.dto.RespResult;
+import world.tangjp.result.RespResult;
 import world.tangjp.entity.User;
 import world.tangjp.utils.Assert;
 
