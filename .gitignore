@@ -1,3 +1,6 @@
+# 忽略环境变量文件
+.env
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

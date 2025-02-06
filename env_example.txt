@@ -1,0 +1,8 @@
+# .env.example
+AI_KEY=your-ai-key
+OSS_ACCESS_KEY=your-access-key
+OSS_ACCESS_SECRET=your-secret
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+DB_USERNAME=root
+DB_PASSWORD=root
