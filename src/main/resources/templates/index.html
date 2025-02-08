@@ -29,6 +29,7 @@
 
 <div th:replace="common/common-bar::#header"></div>
 
+<!--主页中“最好的医疗咨询和自我诊断健康中心”板块区域-->
 <section class="banner">
     <div class="container">
         <div class="banner-content">
@@ -65,6 +66,7 @@
     </div>
 </section>
 
+<!--主页中“注册账号后可以享受更多权益”板块区域-->
 <section th:if="${session.loginUser == null}" class="appointment bg-sfgrey-3">
     <div class="container">
         <div class="row align-items-center flex-mxl-column-reverse">
