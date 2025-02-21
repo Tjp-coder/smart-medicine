@@ -100,13 +100,14 @@ public class ApiService {
      * @return 如果是医疗问题，返回 true；否则返回 false
      */
     private boolean isMedicalQuery(String queryMessage) {
-        // 遍历医疗相关的关键词列表，检查输入消息是否包含这些关键词
-        for (String keyword : MEDICAL_KEYWORDS) {
-            if (queryMessage.contains(keyword)) {
-                return true;  // 如果包含任意一个关键词，则认为是医疗相关问题
-            }
-        }
+//        // 遍历医疗相关的关键词列表，检查输入消息是否包含这些关键词
+//        for (String keyword : MEDICAL_KEYWORDS) {
+//            if (queryMessage.contains(keyword)) {
+//                return true;  // 如果包含任意一个关键词，则认为是医疗相关问题
+//            }
+//        }
         // 如果没有包含任何关键词，返回 false
-        return false;
+//        return false;
+        return true;
     }
 }
