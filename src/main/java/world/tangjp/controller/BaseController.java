@@ -10,6 +10,9 @@ import world.tangjp.entity.IllnessKind;
 import world.tangjp.entity.User;
 import world.tangjp.service.*;
 import world.tangjp.utils.Assert;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +24,7 @@ import java.util.List;
  * 基础控制器
  * @author Tangjp
  */
+@Api(tags = "基础接口")
 public class BaseController<T> {
 
     @Autowired
@@ -54,12 +58,8 @@ public class BaseController<T> {
     protected User loginUser;
     protected List<IllnessKind> kindList;
 
-    /**
-     * 保存、修改
-     *
-     * @param obj 目标对象
-     * @return 响应结果
-     */
+    @ApiOperation("保存数据")
+    @ApiImplicitParam(name = "obj", value = "保存的对象", required = true)
     @ResponseBody
     @PostMapping("save")
     public RespResult save(T obj) {
@@ -70,12 +70,8 @@ public class BaseController<T> {
         return RespResult.success("保存成功", obj);
     }
 
-    /**
-     * 删除
-     *
-     * @param id 主键ID
-     * @return 响应结果
-     */
+    @ApiOperation("删除数据") 
+    @ApiImplicitParam(name = "id", value = "主键ID", required = true, example = "1")
     @ResponseBody
     @PostMapping("/delete")
     public RespResult delete(Integer id) {

@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import world.tangjp.result.RespResult;
 import world.tangjp.entity.User;
 import world.tangjp.utils.Assert;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,23 +22,27 @@ import java.util.Map;
 
  * @author Tangjp
  */
+@Api(tags = "登录认证接口")
 @RestController
 @RequestMapping(value = "login")
 public class LoginController extends BaseController<User> {
 
-    /**
-     * 注册
-     */
+    @ApiOperation("用户注册")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "user", value = "用户信息", required = true),
+        @ApiImplicitParam(name = "code", value = "验证码", required = true),
+        @ApiImplicitParam(name = "email", value = "邮箱", required = true)
+    })
     @PostMapping("/register")
-    public RespResult register(User user, String code) {
+    public RespResult register(User user, String code, String email) {
         // 获取用户输入的邮箱地址
-        String email = user.getUserEmail();
+        String emailAddress = user.getUserEmail();
         // 检查邮箱是否为空，如果为空则返回失败响应
-        if (Assert.isEmpty(email)) {
+        if (Assert.isEmpty(emailAddress)) {
             return RespResult.fail("邮箱不能为空");
         }
         // 从session中获取发送到该邮箱的验证码信息
-        Map<String, Object> codeData = (Map<String, Object>) session.getAttribute("EMAIL_CODE" + email);
+        Map<String, Object> codeData = (Map<String, Object>) session.getAttribute("EMAIL_CODE" + emailAddress);
         // 如果没有找到验证码信息，则返回失败响应
         if (codeData == null) {
             return RespResult.fail("尚未发送验证码");
@@ -47,7 +55,7 @@ public class LoginController extends BaseController<User> {
 
         // 检查验证码是否已过期，如果过期则删除验证码信息并返回失败响应
         if (System.currentTimeMillis() > calendar.getTime().getTime()) {
-            session.removeAttribute("EMAIL_CODE" + email); // 超时删除
+            session.removeAttribute("EMAIL_CODE" + emailAddress); // 超时删除
             return RespResult.fail("验证码已经超时");
         }
         // 比较用户输入的验证码和发送的验证码是否一致，如果不一致则返回失败响应
@@ -69,9 +77,11 @@ public class LoginController extends BaseController<User> {
         return RespResult.success("注册成功", user);
     }
 
-    /**
-     * 登录
-     */
+    @ApiOperation("用户登录")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "userAccount", value = "用户账号", required = true),
+        @ApiImplicitParam(name = "userPwd", value = "用户密码", required = true)
+    })
     @PostMapping("/login")
     public RespResult login(User user) {
         List<User> users = userService.query(user);
@@ -85,16 +95,16 @@ public class LoginController extends BaseController<User> {
         return RespResult.fail("密码错误");
     }
 
-    /**
-     * 发送邮箱验证码
-     */
+    @ApiOperation("发送邮箱验证码")
+    @ApiImplicitParam(name = "email", value = "邮箱地址", required = true)
     @PostMapping("/sendEmailCode")
-    public RespResult sendEmailCode(String email, Map<String, Object> map) {
+    public RespResult sendEmailCode(String email) {
         if (StrUtil.isEmpty(email)) {
             return RespResult.fail("邮箱不可为空");
         }
         // 发送验证码
         String verifyCode = emailClient.sendEmailCode(email);
+        Map<String, Object> map = new java.util.HashMap<>();
         map.put("email", email);
         map.put("code", verifyCode);
         map.put("time", new Date());

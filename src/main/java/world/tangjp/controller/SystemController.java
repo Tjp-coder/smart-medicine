@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import world.tangjp.constant.MedicalConstants;
 import world.tangjp.entity.*;
 import world.tangjp.utils.Assert;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.*;
 
@@ -16,12 +20,14 @@ import java.util.*;
 
  * @author Tangjp
  */
+@Api(tags = "系统管理接口")
 @Controller
 public class SystemController extends BaseController<User> {
 
     /**
      * 首页
      */
+    @ApiOperation("首页")
     @GetMapping("/index.html")
     public String index(Map<String, Object> map) {
         return "index";
@@ -30,6 +36,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 智能医生
      */
+    @ApiOperation("智能医生")
     @GetMapping("/doctor")
     public String doctor(Map<String, Object> map) {
         return "doctor";
@@ -38,6 +45,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 退出登录
      */
+    @ApiOperation("退出登录")
     @GetMapping("/logout")
     public String logout() {
         session.invalidate();
@@ -47,6 +55,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 所有反馈
      */
+    @ApiOperation("查看反馈")
     @GetMapping("/all-feedback")
     public String feedback(Map<String, Object> map) {
         List<Feedback> feedbackList = feedbackService.all();
@@ -58,6 +67,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 我的资料
      */
+    @ApiOperation("个人资料")
     @GetMapping("/profile")
     public String profile(Map<String, Object> map) {
         return "profile";
@@ -72,6 +82,12 @@ public class SystemController extends BaseController<User> {
      * @param page 当前分页页码，默认为1
      * @return 返回前端页面名称"search-illness"
      */
+    @ApiOperation("查询相关疾病")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "kind", value = "疾病分类ID"),
+        @ApiImplicitParam(name = "illnessName", value = "疾病名称关键字"),
+        @ApiImplicitParam(name = "page", value = "当前页码", defaultValue = "1")
+    })
     @GetMapping("findIllness")
     public String findIllness(Map<String, Object> map, Integer kind, String illnessName, Integer page) {
         // 处理分页参数，如果未传入页码，则默认为第一页
@@ -193,6 +209,8 @@ public class SystemController extends BaseController<User> {
     /**
      * 添加疾病页面
      */
+    @ApiOperation("添加/编辑疾病")
+    @ApiImplicitParam(name = "id", value = "疾病ID(编辑时传入)")
     @GetMapping("add-illness")
     public String addIllness(Integer id, Map<String, Object> map) {
         Illness illness = new Illness();
@@ -205,6 +223,8 @@ public class SystemController extends BaseController<User> {
         return "add-illness";
     }
 
+    @ApiOperation("添加/编辑药品")
+    @ApiImplicitParam(name = "id", value = "药品ID(编辑时传入)")
     @GetMapping("add-medical")
     public String addMedical(Integer id, Map<String, Object> map) {
         // 获取所有的疾病信息
@@ -236,6 +256,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 疾病管理页面
      */
+    @ApiOperation("疾病管理列表")
     @GetMapping("all-illness")
     public String allIllness(Map<String, Object> map) {
         List<Illness> illnesses = illnessService.all();
@@ -249,6 +270,7 @@ public class SystemController extends BaseController<User> {
     /**
      * 药品管理页面
      */
+    @ApiOperation("药品管理列表")
     @GetMapping("all-medical")
     public String allMedical(Map<String, Object> map) {
         List<Medicine> medicines = medicineService.all();
