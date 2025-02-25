@@ -1,0 +1,58 @@
+# 忽略构建目录
+target/
+build/
+out/
+
+# 忽略IDE配置文件
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# 忽略日志文件
+logs/
+*.log
+
+# 忽略环境变量文件
+.env
+
+# 忽略Maven包装器
+.mvn/wrapper/
+
+# 忽略静态资源库文件
+src/main/resources/static/common/font-awesome/
+src/main/resources/static/assets/fonts/
+src/main/resources/static/assets/js/jquery-3.5.1.min.js
+src/main/resources/static/assets/js/bootstrap.min.js
+src/main/resources/static/assets/js/plugin.js
+src/main/resources/static/assets/js/jpanelmenu.min.js
+src/main/resources/static/common/layer/
+
+# 忽略编译生成的文件
+*.class
+*.jar
+*.war
+*.ear
+
+# 忽略操作系统生成的文件
+.DS_Store
+Thumbs.db
+
+# 忽略临时文件
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# 忽略测试报告
+test-output/
+reports/
+
+# 忽略文档目录中的临时文件
+docs/*.tmp 

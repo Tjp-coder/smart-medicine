@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "project": {
+    "name": "智慧医药系统",
+    "description": "基于Spring Boot的智慧医药管理系统，提供药品管理、疾病查询、医疗新闻等功能"
+  },
+  "rules": [
+    {
+      "name": "包命名规范",
+      "description": "所有包必须以world.tangjp为基础包名，子包按功能模块划分",
+      "pattern": "package world\\.tangjp(\\.[a-z][a-z0-9]*)*;"
+    },
+    {
+      "name": "控制器命名规范",
+      "description": "控制器类必须以Controller结尾",
+      "pattern": "public class [A-Z][a-zA-Z0-9]*Controller"
+    },
+    {
+      "name": "服务类命名规范",
+      "description": "服务类必须以Service结尾",
+      "pattern": "public (class|interface) [A-Z][a-zA-Z0-9]*Service"
+    },
+    {
+      "name": "数据访问类命名规范",
+      "description": "数据访问类必须以Dao结尾",
+      "pattern": "public (class|interface) [A-Z][a-zA-Z0-9]*Dao"
+    },
+    {
+      "name": "实体类命名规范",
+      "description": "实体类必须使用名词，首字母大写",
+      "pattern": "public class [A-Z][a-zA-Z0-9]* (implements|extends|\\{)"
+    },
+    {
+      "name": "工具类命名规范",
+      "description": "工具类必须以Utils结尾",
+      "pattern": "public class [A-Z][a-zA-Z0-9]*Utils"
+    },
+    {
+      "name": "Swagger文档规范",
+      "description": "控制器方法必须使用@ApiOperation注解",
+      "pattern": "@ApiOperation\\(.*\\)"
+    },
+    {
+      "name": "统一响应对象",
+      "description": "所有接口必须返回RespResult类型",
+      "pattern": "public RespResult [a-zA-Z0-9]*\\("
+    },
+    {
+      "name": "类注释规范",
+      "description": "所有类必须有注释说明功能和作者",
+      "pattern": "/\\*\\*[\\s\\S]*?\\*\\s*@author[\\s\\S]*?\\*/"
+    },
+    {
+      "name": "方法注释规范",
+      "description": "公共方法必须有注释说明功能、参数和返回值",
+      "pattern": "/\\*\\*[\\s\\S]*?\\*/\\s*public"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "name": "用户管理",
+      "description": "系统应提供用户注册、登录、个人信息管理功能"
+    },
+    {
+      "id": "REQ-002",
+      "name": "药品管理",
+      "description": "系统应提供药品信息的增删改查功能"
+    },
+    {
+      "id": "REQ-003",
+      "name": "疾病管理",
+      "description": "系统应提供疾病信息的增删改查功能"
+    },
+    {
+      "id": "REQ-004",
+      "name": "医疗新闻",
+      "description": "系统应提供医疗新闻的发布和浏览功能"
+    },
+    {
+      "id": "REQ-005",
+      "name": "疾病药品关联",
+      "description": "系统应提供疾病与药品的关联管理功能"
+    },
+    {
+      "id": "REQ-006",
+      "name": "历史记录",
+      "description": "系统应记录用户的浏览历史"
+    },
+    {
+      "id": "REQ-007",
+      "name": "邮件验证",
+      "description": "系统应支持邮件验证码功能"
+    },
+    {
+      "id": "REQ-008",
+      "name": "API文档",
+      "description": "系统应使用Knife4j提供API文档"
+    },
+    {
+      "id": "REQ-009",
+      "name": "文件上传",
+      "description": "系统应支持文件上传到阿里云OSS"
+    },
+    {
+      "id": "REQ-010",
+      "name": "AI集成",
+      "description": "系统应集成阿里云通义千问AI功能"
+    }
+  ]
+} 

@@ -27,10 +27,7 @@ public abstract class BaseService<T> implements IService<T> {
 
     @Autowired
     protected MedicineDao medicineDao;
-
-    @Autowired
-    protected MedicalNewsDao medicalNewsDao;
-
+    
     @Autowired
     protected PageviewDao pageviewDao;
 

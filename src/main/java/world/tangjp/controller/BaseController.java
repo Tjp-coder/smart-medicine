@@ -41,8 +41,6 @@ public class BaseController<T> {
     protected HistoryService historyService;
 
     @Autowired
-    protected MedicalNewsService medicalNewsService;
-    @Autowired
     protected MedicineService medicineService;
     @Autowired
     protected FeedbackService feedbackService;
