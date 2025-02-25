@@ -38,11 +38,12 @@ public class BaseController<T> {
     @Autowired
     protected IllnessService illnessService;
     @Autowired
+    protected HistoryService historyService;
+
+    @Autowired
     protected MedicalNewsService medicalNewsService;
     @Autowired
     protected MedicineService medicineService;
-    @Autowired
-    protected HistoryService historyService;
     @Autowired
     protected FeedbackService feedbackService;
 

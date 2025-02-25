@@ -137,6 +137,8 @@ public class SystemController extends BaseController<User> {
     /**
      * 查询疾病详情
      */
+    @ApiOperation("查询疾病详情")
+    @ApiImplicitParam(name = "id", value = "疾病ID", required = true)
     @GetMapping("findIllnessOne")
     public String findIllnessOne(Map<String, Object> map, Integer id) {
         Map<String, Object> illnessOne = illnessService.findIllnessOne(id);
@@ -151,6 +153,8 @@ public class SystemController extends BaseController<User> {
     /**
      * 查询药品详情
      */
+    @ApiOperation("查询药品详情")
+    @ApiImplicitParam(name = "id", value = "药品ID", required = true)
     @GetMapping("findMedicineOne")
     public String findMedicineOne(Map<String, Object> map, Integer id) {
         Medicine medicine = medicineService.get(id);
@@ -162,6 +166,11 @@ public class SystemController extends BaseController<User> {
     /**
      * 查找药品
      */
+    @ApiOperation("搜索药品列表")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "nameValue", value = "药品名称关键字"),
+        @ApiImplicitParam(name = "page", value = "当前页码", defaultValue = "1")
+    })
     @GetMapping("findMedicines")
     public String findMedicines(Map<String, Object> map, String nameValue, Integer page) {
         // 处理page
@@ -178,6 +187,8 @@ public class SystemController extends BaseController<User> {
     /**
      * 查询相关疾病下的药
      */
+    @ApiOperation("全局搜索疾病信息")
+    @ApiImplicitParam(name = "nameValue", value = "搜索关键字(多个关键字用逗号分隔)", required = true)
     @GetMapping("globalSelect")
     public String globalSelect(Map<String, Object> map, String nameValue) {
         nameValue = nameValue.replace("，", ",");
