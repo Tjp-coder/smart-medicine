@@ -3,6 +3,7 @@ package world.tangjp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import world.tangjp.component.EmailClient;
 import world.tangjp.result.RespResult;
@@ -11,7 +12,6 @@ import world.tangjp.entity.User;
 import world.tangjp.service.*;
 import world.tangjp.utils.Assert;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,10 +58,9 @@ public class BaseController<T> {
     protected List<IllnessKind> kindList;
 
     @ApiOperation("保存数据")
-    @ApiImplicitParam(name = "obj", value = "保存的对象", required = true)
     @ResponseBody
     @PostMapping("save")
-    public RespResult save(T obj) {
+    public RespResult save(@RequestBody T obj) {
         if (Assert.isEmpty(obj)) {
             return RespResult.fail("保存对象不能为空");
         }
@@ -70,7 +69,6 @@ public class BaseController<T> {
     }
 
     @ApiOperation("删除数据") 
-    @ApiImplicitParam(name = "id", value = "主键ID", required = true, example = "1")
     @ResponseBody
     @PostMapping("/delete")
     public RespResult delete(Integer id) {

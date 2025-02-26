@@ -8,8 +8,6 @@ import world.tangjp.result.RespResult;
 import world.tangjp.entity.User;
 import world.tangjp.utils.Assert;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.Calendar;
@@ -28,11 +26,6 @@ import java.util.Map;
 public class LoginController extends BaseController<User> {
 
     @ApiOperation("用户注册")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "user", value = "用户信息", required = true),
-        @ApiImplicitParam(name = "code", value = "验证码", required = true),
-        @ApiImplicitParam(name = "email", value = "邮箱", required = true)
-    })
     @PostMapping("/register")
     public RespResult register(User user, String code, String email) {
         // 获取用户输入的邮箱地址
@@ -78,10 +71,6 @@ public class LoginController extends BaseController<User> {
     }
 
     @ApiOperation("用户登录")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "userAccount", value = "用户账号", required = true),
-        @ApiImplicitParam(name = "userPwd", value = "用户密码", required = true)
-    })
     @PostMapping("/login")
     public RespResult login(User user) {
         List<User> users = userService.query(user);
@@ -96,7 +85,6 @@ public class LoginController extends BaseController<User> {
     }
 
     @ApiOperation("发送邮箱验证码")
-    @ApiImplicitParam(name = "email", value = "邮箱地址", required = true)
     @PostMapping("/sendEmailCode")
     public RespResult sendEmailCode(String email) {
         if (StrUtil.isEmpty(email)) {

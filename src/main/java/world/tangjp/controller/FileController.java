@@ -11,7 +11,6 @@ import world.tangjp.result.RespResult;
 import world.tangjp.entity.User;
 import world.tangjp.utils.Assert;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 import java.io.IOException;
@@ -33,7 +32,6 @@ public class FileController extends BaseController<User> {
      * 上传文件到OSS
      */
     @ApiOperation(value = "上传文件", notes = "上传文件到阿里云OSS存储")
-    @ApiImplicitParam(name = "file", value = "上传的文件", required = true, dataType = "file")
     @PostMapping("/upload")
     public RespResult upload(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {

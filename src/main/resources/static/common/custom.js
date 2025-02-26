@@ -117,13 +117,14 @@ function updateProfile() {
     $.ajax({
         type: "POST",
         url: "user/saveProfile",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             id: id,
             userName: userName,
             userTel: userTel,
             userAge: userAge,
             imgPath: imgPath,
-        },
+        }),
         dataType: "json",
         success: function (data) {
             layer.msg(data['message']);
@@ -260,12 +261,13 @@ function feedback() {
     $.ajax({
         type: "POST",
         url: "feedback/save",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             name: name,
             email: email,
             title: title,
             content: content,
-        },
+        }),
         dataType: "json",
         success: function (data) {
             layer.msg(data['message']);
@@ -291,14 +293,15 @@ function saveIllness() {
     $.ajax({
         type: "POST",
         url: "illness/save",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             id: id,
             illnessName: illnessName,
             includeReason: includeReason,
             illnessSymptom: illnessSymptom,
             specialSymptom: specialSymptom,
             kindId: kindId,
-        },
+        }),
         dataType: "json",
         success: function (data) {
             layer.msg(data['message']);
@@ -328,7 +331,8 @@ function saveMedicine() {
     $.ajax({
         type: "POST",
         url: "medicine/save",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             id: id,
             imgPath: imgPath,
             medicineName: medicineName,
@@ -340,7 +344,7 @@ function saveMedicine() {
             taboo: taboo,
             usAge: usAge,
             medicineType: medicineType,
-        },
+        }),
         dataType: "json",
         success: function (data) {
             layer.msg(data['message']);
@@ -402,10 +406,11 @@ function saveIllnessMedicine(illnessId, medicineId) {
     $.ajax({
         type: "POST",
         url: "illness_medicine/save",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             illnessId: illnessId,
             medicineId: medicineId,
-        },
+        }),
         dataType: "json",
         success: function (data) {
             layer.msg('修改成功');

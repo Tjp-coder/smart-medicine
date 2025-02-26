@@ -22,7 +22,7 @@ import java.util.Map;
 public class FeedbackService extends BaseService<Feedback> {
 
     @Autowired
-    protected FeedbackDao userDao;
+    protected FeedbackDao feedbackDao;
 
     @Override
     public List<Feedback> query(Feedback o) {
@@ -36,7 +36,7 @@ public class FeedbackService extends BaseService<Feedback> {
                 wrapper.eq(VariableNameUtils.humpToLine(key), bean2Map.get(key));
             }
         }
-        return userDao.selectList(wrapper);
+        return feedbackDao.selectList(wrapper);
     }
 
     @Override
@@ -46,21 +46,26 @@ public class FeedbackService extends BaseService<Feedback> {
 
     @Override
     public Feedback save(Feedback o) {
-        if (Assert.isEmpty(o.getId())) {
-            userDao.insert(o);
-        } else {
-            userDao.updateById(o);
+        // 检查必要字段是否为空
+        if (o.getName() == null || o.getEmail() == null || o.getTitle() == null || o.getContent() == null) {
+            throw new IllegalArgumentException("name, email, title, content不能为空");
         }
-        return userDao.selectById(o.getId());
+        
+        if (Assert.isEmpty(o.getId())) {
+            feedbackDao.insertFeedback(o);
+        } else {
+            feedbackDao.updateById(o);
+        }
+        return feedbackDao.selectById(o.getId());
     }
 
     @Override
     public Feedback get(Serializable id) {
-        return userDao.selectById(id);
+        return feedbackDao.selectById(id);
     }
 
     @Override
     public int delete(Serializable id) {
-        return userDao.deleteById(id);
+        return feedbackDao.deleteById(id);
     }
 }

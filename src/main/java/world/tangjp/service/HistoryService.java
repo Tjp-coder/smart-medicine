@@ -48,8 +48,13 @@ public class HistoryService extends BaseService<History> {
 
     @Override
     public History save(History o) {
+        // 检查必要字段是否为空
+        if (o.getUserId() == null || o.getKeyword() == null || o.getOperateType() == null) {
+            throw new IllegalArgumentException("userId, keyword, operateType不能为空");
+        }
+        
         if (Assert.isEmpty(o.getId())) {
-            historyDao.insert(o);
+            historyDao.insertHistory(o);
         } else {
             historyDao.updateById(o);
         }
@@ -67,9 +72,14 @@ public class HistoryService extends BaseService<History> {
     }
 
     public boolean insetOne(Integer uid, Integer type, String nameValue) {
+        // 检查必要参数是否为空
+        if (uid == null || type == null || nameValue == null) {
+            throw new IllegalArgumentException("uid, type, nameValue不能为空");
+        }
+        
         History history = new History();
         history.setUserId(uid).setKeyword(nameValue).setOperateType(type);
-        return historyDao.insert(history) > 0;
+        return historyDao.insertHistory(history) > 0;
     }
 
     public List<Map<String, Object>> findList(Integer userId) {
