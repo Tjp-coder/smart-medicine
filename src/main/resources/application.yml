@@ -3,7 +3,7 @@ spring:
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:mysql://127.0.0.1:3306/smart-medicine?serverTimezone=Hongkong&useAffectedRows=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/smart-medicine_old?serverTimezone=Hongkong&useAffectedRows=true&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   mvc:
