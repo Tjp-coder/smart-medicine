@@ -1,10 +1,10 @@
 /* 主色调 - 蓝色系 */
 :root {
-  --primary-color: #4B89DC;     /* 主蓝色 替换原#50B7A1 */
-  --secondary-color: #E8F4FF;   /* 浅蓝色背景 保持不变 */
-  --dark-color: #2C3E50;        /* 深蓝色 替换原#2C4251 */
-  --light-color: #F5F9FF;       /* 淡蓝色 替换原#F5F7FA */
-  --accent-color: #5D9CEC;      /* 强调蓝 替换原#78C5BC */
+  --primary-color: #4285F4;     /* 主蓝色 - 更鲜明的谷歌蓝 */
+  --secondary-color: #EBF4FF;   /* 浅蓝色背景 - 微调更柔和 */
+  --dark-color: #2C3E50;        /* 深蓝色 */
+  --light-color: #F8FBFF;       /* 淡蓝色 - 更明亮 */
+  --accent-color: #5C9EFF;      /* 强调蓝 - 更鲜艳 */
 }
 
 /* 按钮颜色 */

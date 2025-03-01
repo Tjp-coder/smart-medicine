@@ -31,7 +31,7 @@
 
 <div th:replace="common/common-bar::#header"></div>
 
-<div id="dashboard">
+<div id="dashboard" style="background-color: #f0f8ff; color: #333;">
     <div class="container">
         <div class="dashboard-main">
             <div class="row">
@@ -42,14 +42,12 @@
                     <div class="dashboard-content">
                         <div class="dashboard-form mb-4">
                             <div class="row">
-
                                 <div class="col-lg-12 col-md-12 col-xs-12 padding-right-30">
                                     <div class="dashboard-list">
                                         <h4 class="gray">我的资料</h4>
                                         <div class="dashboard-list-static">
-
-                                            <div class="edit-profile-photo">
-                                                <img id="img-preview" th:src="${session.loginUser.imgPath}" alt=""/>
+                                            <div class="edit-profile-photo" style="text-align: center;">
+                                                <img id="img-preview" th:src="${session.loginUser.imgPath}" alt="" style="border-radius: 50%; width: 150px; height: 150px;"/>
                                                 <div class="change-photo-btn">
                                                     <div class="photoUpload">
                                                         <span><i class="fa fa-upload"></i> 点击上传</span>
@@ -58,71 +56,54 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="my-profile">
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>账户名称</label>
-                                                            <input style="background: #ecf0f1" disabled
-                                                                   th:value="${session.loginUser.userAccount}"
-                                                                   type="text"/>
-                                                            <input id="userId" style="display: none"
-                                                                   th:value="${session.loginUser.id}" type="text"/>
+                                                            <input style="background: #ecf0f1" disabled th:value="${session.loginUser.userAccount}" type="text"/>
+                                                            <input id="userId" style="display: none" th:value="${session.loginUser.id}" type="text"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>真实姓名</label>
-                                                            <input id="userName"
-                                                                   th:value="${session.loginUser.userName}"
-                                                                   type="text"/>
+                                                            <input id="userName" th:value="${session.loginUser.userName}" type="text"/>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>性别</label>
-                                                            <input disabled style="background: #ecf0f1"
-                                                                   th:value="${session.loginUser.userSex}" type="text"/>
+                                                            <input disabled style="background: #ecf0f1" th:value="${session.loginUser.userSex}" type="text"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>年龄</label>
-                                                            <input id="userAge" th:value="${session.loginUser.userAge}"
-                                                                   type="number"/>
+                                                            <input id="userAge" th:value="${session.loginUser.userAge}" type="number"/>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>邮箱</label>
-                                                            <input style="background: #ecf0f1" disabled
-                                                                   th:value="${session.loginUser.userEmail}"
-                                                                   type="text"/>
+                                                            <input style="background: #ecf0f1" disabled th:value="${session.loginUser.userEmail}" type="text"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>手机号</label>
-                                                            <input id="userTel" th:value="${session.loginUser.userTel}"
-                                                                   type="number"/>
+                                                            <input id="userTel" th:value="${session.loginUser.userTel}" type="number"/>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
                                                     <label>注册时间</label>
-                                                    <input style="background: #ecf0f1" disabled
-                                                           th:value="${#dates.format(session.loginUser.createTime, 'yyyy年MM月dd日 HH:mm:ss')}"
-                                                           type="text"/>
+                                                    <input style="background: #ecf0f1" disabled th:value="${#dates.format(session.loginUser.createTime, 'yyyy年MM月dd日 HH:mm:ss')}" type="text"/>
                                                 </div>
-
                                             </div>
                                             <div>
                                                 <button class="btn btn-na" onclick="updateProfile()">保存修改</button>
@@ -166,7 +147,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

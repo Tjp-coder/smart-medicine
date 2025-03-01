@@ -180,14 +180,14 @@
 </div>
 
 <!-- 智能医生模块的侧边栏 -->
-<div id="dashboard-sidebar" class="dashboard-sidebar">
+<div id="dashboard-sidebar" class="dashboard-sidebar" style="background-color: #f0f8ff; color: #333;">
     <!-- 用户信息部分 -->
     <div class="profile-sec">
         <div class="author-news mb-3">
             <div class="author-news-content text-center p-3">
                 <!-- 用户头像 -->
                 <div class="author-thumb mt-0">
-                    <img th:src="${session.loginUser.imgPath}" alt="author"/>
+                    <img th:src="${session.loginUser.imgPath}" alt="author" style="border-radius: 50%; width: 100px; height: 100px;"/>
                 </div>
                 <!-- 用户基本信息 -->
                 <div class="author-content pt-2 p-0">

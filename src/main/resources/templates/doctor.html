@@ -31,7 +31,7 @@
 
 <div th:replace="common/common-bar::#header"></div>
 
-<div id="dashboard">
+<div id="dashboard" style="background-color: #f0f8ff; color: #333;">
     <div class="container">
         <div class="dashboard-main">
             <div class="row">
@@ -42,18 +42,18 @@
                     <div class="dashboard-content">
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
-                                <div class="message">
+                                <div class="message" style="border: 1px solid #007bff; border-radius: 10px; padding: 20px; background-color: #e7f1ff;">
                                     <div class="message-header inbox-item">
                                         <div class="inbox-image">
                                             <img src="assets/images/team/user-2.jpg" alt="image">
                                         </div>
                                         <div class="inbox-content">
-                                            <p>智能在线医生</p>
-                                            <span>你的专属医生，随时为您服务！</span>
+                                            <p style="font-weight: bold;">智能在线医生</p>
+                                            <span style="color: #007bff;">你的专属医生，随时为您服务！</span>
                                         </div>
                                     </div>
                                     <div class="message-content">
-                                        <div id="messages" style="height: 260px;overflow-y: auto">
+                                        <div id="messages" style="height: 260px; overflow-y: auto;">
                                             <div class="msg-received">
                                                 <div class="msg-image">
                                                     <img src="assets/images/team/user-2.jpg" alt="image">
@@ -67,8 +67,8 @@
                                         </div>
 
                                         <div class="msg-reply">
-                                            <textarea id="message" placeholder="输入要咨询的内容..."></textarea>
-                                            <button onclick="send()" class="btn btn-na mt-2 pull-right">发送</button>
+                                            <textarea id="message" placeholder="输入要咨询的内容..." style="width: 100%; border-radius: 5px; padding: 10px;"></textarea>
+                                            <button onclick="send()" class="btn btn-primary mt-2 pull-right" style="border-radius: 5px;">发送</button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +78,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

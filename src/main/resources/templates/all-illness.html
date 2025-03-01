@@ -31,7 +31,7 @@
 
 <div th:replace="common/common-bar::#header"></div>
 
-<div id="dashboard">
+<div id="dashboard" style="background-color: #f0f8ff; color: #333;">
     <div class="container">
         <div class="dashboard-main">
             <div class="row">
@@ -45,8 +45,7 @@
                                 <div class="dashboard-list-box with-icons">
                                     <div class="dashboard-title">
                                         <h4 class="mb-0">全部疾病 </h4>
-                                        <p class="mb-0">共收集 [[${illnesses.size()}]] 条疾病信息。你可以继续<a href="/add-illness">新增疾病</a>。
-                                        </p>
+                                        <p class="mb-0">共收集 [[${illnesses.size()}]] 条疾病信息。你可以继续<a href="/add-illness">新增疾病</a>。</p>
                                     </div>
                                     <div class="table-responsive table-desi">
                                         <table class="basic-table table table-hover">
@@ -86,7 +85,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
