@@ -149,16 +149,20 @@
     </div>
 </footer>
 
-<!--搜索功能，查询疾病-->
-<form id="search" action="findIllness" class="ct-searchForm">
+<!--搜索功能，查询疾病或药品-->
+<form id="search" class="ct-searchForm">
     <div class="inner">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-8">
                     <div class="form-group">
                         <input id="cf-search-form" type="text" placeholder="搜索一下，了解更多 ..." required
-                               class="form-control" name="illnessName"/>
-                        <button class="ct-search-btn"><i class="fa fa-search"></i></button>
+                               class="form-control"/>
+                        <button class="ct-search-btn" type="button" onclick="searchGlobalSelect()"><i class="fa fa-search"></i></button>
+                    </div>
+                    <div class="form-group d-flex justify-content-center">
+                        <button type="button" class="btn btn-outline-primary mr-3" style="border-radius: 20px; padding: 8px 20px; margin-right: 15px;" onclick="searchIllness()"><i class="fa fa-stethoscope mr-1"></i> 疾病</button>
+                        <button type="button" class="btn btn-outline-success" style="border-radius: 20px; padding: 8px 20px;" onclick="searchMedicines()"><i class="fa fa-medkit mr-1"></i> 药品</button>
                     </div>
                     <div class="form-group">
                         <a href="#" class="ct-searchForm-close">

@@ -167,7 +167,7 @@ public class SystemController extends BaseController<User> {
         }
         map.putAll(medicineService.getMedicineList(nameValue, page));
         map.put("history", loginUser == null ? null : historyService.findList(loginUser.getId()));
-        map.put("title", nameValue);
+        map.put("title", Assert.notEmpty(nameValue) ? nameValue : "全部药品");
         return "illness";
     }
 

@@ -542,10 +542,49 @@ function searchGlobalSelect() {
         return;
     }
     let href = window.location.href;
-    alert(href);
     href = href.split("/")[0] + "/findIllness?illnessName="+content;
     reloadToGO(href);
 }
+
+/**
+ * 搜索疾病
+ */
+function searchIllness() {
+    let content = $("#cf-search-form").val().trim();
+    if (content == ""){
+        xtip.msg("请输入查询内容");
+        return;
+    }
+    let href = window.location.href;
+    href = href.split("/")[0] + "/findIllness?illnessName="+content;
+    reloadToGO(href);
+}
+
+/**
+ * 搜索药品
+ */
+function searchMedicines() {
+    let content = $("#cf-search-form").val().trim();
+    if (content == ""){
+        xtip.msg("请输入查询内容");
+        return;
+    }
+    let href = window.location.href;
+    href = href.split("/")[0] + "/findMedicines?nameValue="+content;
+    reloadToGO(href);
+}
+
+// 页面加载完成后添加回车键搜索功能
+$(document).ready(function() {
+    // 为搜索框添加回车键事件
+    $("#cf-search-form").keypress(function(event) {
+        if (event.which == 13) { // 13是回车键的键值
+            searchGlobalSelect();
+            event.preventDefault(); // 阻止表单默认提交行为
+        }
+    });
+});
+
 /**
  * 搜索药
  */
