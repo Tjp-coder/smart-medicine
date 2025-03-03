@@ -247,7 +247,6 @@ public class SystemController extends BaseController<User> {
         return "add-medical";
     }
 
-
     /**
      * 疾病管理页面
      */
@@ -271,5 +270,31 @@ public class SystemController extends BaseController<User> {
         List<Medicine> medicines = medicineService.all();
         map.put("medicines", medicines);
         return "all-medical";
+    }
+
+    /**
+     * 症状自检页面
+     */
+    @ApiOperation("症状自检页面")
+    @GetMapping("findSymptoms")
+    public String findSymptoms(Map<String, Object> map) {
+        // 如果用户未登录，添加默认用户图像
+//        if (loginUser == null) {
+//            User defaultUser = new User();
+//            defaultUser.setImgPath("/assets/images/cropped-favicon-32x32.png");
+//            session.setAttribute("loginUser", defaultUser);
+//        }
+
+        // 获取当前用户ID,默认为0(未登录)
+        Integer userId = 0;
+        if (loginUser != null) {
+            userId = loginUser.getId();
+        }
+
+        // 查询症状日志
+        List<SymptomLog> logs = symptomService.query(SymptomLog.builder().userId(userId).build());
+        map.put("logs", logs);
+
+        return "symptom-search";
     }
 }

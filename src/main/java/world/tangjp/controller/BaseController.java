@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import world.tangjp.component.EmailClient;
-import world.tangjp.exception.BusinessException;
 import world.tangjp.result.RespResult;
 import world.tangjp.entity.IllnessKind;
 import world.tangjp.entity.User;
@@ -46,6 +45,8 @@ public class BaseController<T> {
     @Autowired
     protected FeedbackService feedbackService;
 
+    @Autowired
+    protected SymptomService symptomService;
     @Autowired
     protected BaseService<T> service;
 
@@ -95,13 +96,10 @@ public class BaseController<T> {
         this.response = response;
         this.session = request.getSession(true);
         loginUser = (User) session.getAttribute("loginUser");
-        session.setAttribute("kindList", illnessKindService.findList());
-    }
-
-    // 在BaseController中新增校验方法
-    protected void checkAuth(Integer userId) {
-        if (loginUser == null || !loginUser.getId().equals(userId)) {
-            throw new BusinessException(403, "无操作权限");
+        // 只在session中没有kindList时才查询设置  // 这行是关键
+        if (session.getAttribute("kindList") == null) {
+            session.setAttribute("kindList", illnessKindService.findList());
         }
     }
+
 }

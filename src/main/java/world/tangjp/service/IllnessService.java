@@ -29,6 +29,21 @@ public class IllnessService extends BaseService<Illness> {
     @Autowired
     protected IllnessDao illnessDao;
 
+    /**
+     * 动态条件查询疾病信息
+     * @param o 查询条件对象（非空时生效）
+     * @return 符合条件的疾病列表（无结果时返回空列表）
+     * 
+     * 实现逻辑：
+     * 1. 创建MyBatis Plus查询包装器
+     * 2. 当传入对象非空时：
+     *    - 将对象属性转换为Map结构
+     *    - 遍历Map中的每个属性：
+     *      * 跳过空值属性
+     *      * 将驼峰属性名转换为下划线字段名
+     *      * 添加等值查询条件（WHERE field = value）
+     * 3. 执行查询并返回结果
+     */
     @Override
     public List<Illness> query(Illness o) {
         QueryWrapper<Illness> wrapper = new QueryWrapper();
@@ -44,11 +59,29 @@ public class IllnessService extends BaseService<Illness> {
         return illnessDao.selectList(wrapper);
     }
 
+    /**
+     * 查询全部疾病记录
+     * @return 所有疾病数据列表（按默认排序）
+     * 
+     * 实现方式：
+     * 通过调用query方法并传入null参数，触发无条件查询
+     * 等效于执行 SQL: SELECT * FROM illness
+     */
     @Override
     public List<Illness> all() {
         return query(null);
     }
 
+    /**
+     * 保存/更新疾病信息
+     * @param o 疾病实体对象
+     * @return 操作后的完整疾病对象
+     * 
+     * 实现逻辑：
+     * 1. ID为空时执行插入操作
+     * 2. ID非空时执行更新操作
+     * 3. 返回最新数据库记录
+     */
     @Override
     public Illness save(Illness o) {
         if (Assert.isEmpty(o.getId())) {
@@ -59,16 +92,40 @@ public class IllnessService extends BaseService<Illness> {
         return illnessDao.selectById(o.getId());
     }
 
+    /**
+     * 根据ID获取单个疾病
+     * @param id 疾病记录主键
+     * @return 对应ID的疾病对象（不存在时返回null）
+     */
     @Override
     public Illness get(Serializable id) {
         return illnessDao.selectById(id);
     }
 
+    /**
+     * 根据ID删除疾病记录
+     * @param id 要删除的记录主键
+     * @return 受影响的行数（通常1表示成功，0表示失败）
+     */
     @Override
     public int delete(Serializable id) {
         return illnessDao.deleteById(id);
     }
 
+    /**
+     * 分页查询疾病信息（带搜索条件）
+     * @param kind 疾病分类ID（null表示不限制）
+     * @param illnessName 疾病名称关键字（支持模糊搜索）
+     * @param page 当前页码（从1开始）
+     * @return 包含两个属性的map：
+     *         illness: 当前页数据列表（带分类名称和浏览量）
+     *         size: 总页数
+     * 
+     * 特别说明：
+     * 1. 每页固定显示9条记录
+     * 2. 当同时存在分类和搜索词时，使用SQL拼接条件
+     * 3. 结果集包含分类名称转换和浏览量统计
+     */
     public Map<String, Object> findIllness(Integer kind, String illnessName, Integer page) {
         Map<String, Object> map = new HashMap<>(4);
         QueryWrapper<Illness> illnessQueryWrapper = new QueryWrapper<>();
@@ -116,6 +173,17 @@ public class IllnessService extends BaseService<Illness> {
         return map;
     }
 
+    /**
+     * 获取疾病详细信息（含关联药品）
+     * @param id 疾病ID
+     * @return 包含两个属性的map：
+     *         illness: 疾病详细信息
+     *         medicine: 关联药品列表
+     * 
+     * 附带功能：
+     * 1. 每次访问自动增加该疾病的浏览量
+     * 2. 自动关联查询对应药品信息
+     */
     public Map<String, Object> findIllnessOne(Integer id) {
         Illness illness = illnessDao.selectOne(new QueryWrapper<Illness>().eq("id", id));
         List<IllnessMedicine> illnessMedicines = illnessMedicineDao.selectList(new QueryWrapper<IllnessMedicine>().eq("illness_id", id));
@@ -145,6 +213,11 @@ public class IllnessService extends BaseService<Illness> {
         return map;
     }
 
+    /**
+     * 自定义条件查询单个疾病
+     * @param queryWrapper 自定义查询条件
+     * @return 符合条件的第一条记录（无结果返回null）
+     */
     public Illness getOne(QueryWrapper<Illness> queryWrapper) {
         return illnessDao.selectOne(queryWrapper);
     }

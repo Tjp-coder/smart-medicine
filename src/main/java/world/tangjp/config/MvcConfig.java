@@ -62,7 +62,9 @@ public class MvcConfig implements WebMvcConfigurer, ErrorPageRegistrar {
                         "/findIllnessOne",
                         "/findMedicineOne",
                         "/findMedicines",
-                        "/globalSelect"); // 排除无需验证的路径
+                        "/globalSelect",
+                        "/symptom/page",
+                        "/symptom/detail"); // 排除无需验证的路径
     }
 
 }

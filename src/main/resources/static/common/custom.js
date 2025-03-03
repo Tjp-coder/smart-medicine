@@ -599,3 +599,115 @@ function searchMedicine() {
     reloadToGO(href);
 }
 
+/**
+ * 症状自检搜索
+ */
+function searchSymptom() {
+    let keyword = $('#symptomKeyword').val().trim();
+    if (!keyword) {
+        layer.msg("请输入症状关键词");
+        return;
+    }
+
+    // 显示加载中弹窗
+    let loadingIndex = layer.msg('自检中请稍后...', {
+        icon: 16,
+        shade: 0.3,
+        time: 2000
+    });
+
+    // 发送搜索请求
+    setTimeout(function() {
+        $.ajax({
+            type: "POST",
+            url: "symptom/search",
+            contentType: "application/json",
+            data: JSON.stringify({
+                keyword: keyword
+            }),
+            dataType: "json",
+            success: function(response) {
+                layer.close(loadingIndex);
+                if (response.code === 'SUCCESS') {
+                    let illnesses = response.data;
+                    if (illnesses && illnesses.length > 0) {
+                        // 构建疾病名称列表字符串
+                        let illnessNames = illnesses.map(item => item.illnessName).join('、');
+                        
+                        // 显示结果弹窗
+                        layer.confirm('根据你的症状，推测可能是：' + illnessNames, {
+                            btn: ['保存','取消'],
+                            title: '自检结果'
+                        }, function(index){
+                            // 点击保存按钮
+                            saveSymptomLog(keyword);
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg("未找到匹配的疾病信息");
+                    }
+                } else {
+                    layer.msg(response.message);
+                }
+            },
+            error: function() {
+                layer.close(loadingIndex);
+                layer.msg("查询失败，请稍后重试");
+            }
+        });
+    }, 2000); // 延迟2秒
+}
+
+/**
+ * 保存症状记录
+ */
+function saveSymptomLog(keyword) {
+    $.ajax({
+        type: "POST",
+        url: "symptom/saveSymptom",
+        contentType: "application/json",
+        data: JSON.stringify({
+            keyword: keyword
+        }),
+        dataType: "json",
+        success: function(response) {
+            if (response.code === 'SUCCESS') {
+                layer.msg("保存成功");
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(response.message);
+            }
+        }
+    });
+}
+
+/**
+ * 删除症状记录
+ */
+function deleteSymptom(id) {
+    layer.confirm('确定要删除这条症状记录吗？', {
+        btn: ['确定','取消']
+    }, function(){
+        $.ajax({
+            type: "POST",
+            url: "symptom/delete",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.code === 'SUCCESS') {
+                    layer.msg("删除成功");
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    layer.msg(response.message);
+                }
+            }
+        });
+    });
+}
+

@@ -20,6 +20,9 @@ public abstract class BaseService<T> implements IService<T> {
     protected IllnessDao illnessDao;
 
     @Autowired
+    protected SymptomDao symptomDao;
+
+    @Autowired
     protected IllnessKindDao illnessKindDao;
 
     @Autowired

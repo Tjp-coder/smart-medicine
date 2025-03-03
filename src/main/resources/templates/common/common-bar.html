@@ -36,9 +36,12 @@
 
                     <div class="navbar-collapse1" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav" id="responsive-menu">
+                            <li><a href="doctor">智能医生</a></li>
                             <li><a href="findIllness">疾病百科</a></li>
                             <li><a href="findMedicines">查找药品</a></li>
-                            <li><a href="doctor">智能医生</a></li>
+                            <li><a href="findSymptoms">症状自检</a></li>
+<!--                            <li><a href="">健康档案</a></li>-->
+<!--                            <li><a href="">病友交流</a></li>-->
                         </ul>
                     </div>
                     <div th:if="${session.loginUser == null}" class="header-btn">
@@ -55,7 +58,7 @@
                         <div class="dropdown">
                             <button class="btn-dash dropdown-toggle" type="button" id="dropdownMenuButton11"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user-circle"></i> 欢迎你【 [[${session.loginUser.userName}]] 】
+                                <i class="fa fa-user-circle"></i> 欢迎你【 [[${session.loginUser?.userName}]] 】
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton11">
                                 <a class="dropdown-item" href="profile"><i class="sl sl-icon-user"></i> 我的资料</a>
@@ -158,11 +161,18 @@
                     <div class="form-group">
                         <input id="cf-search-form" type="text" placeholder="搜索一下，了解更多 ..." required
                                class="form-control"/>
-                        <button class="ct-search-btn" type="button" onclick="searchGlobalSelect()"><i class="fa fa-search"></i></button>
+                        <button class="ct-search-btn" type="button" onclick="searchGlobalSelect()"><i
+                                class="fa fa-search"></i></button>
                     </div>
                     <div class="form-group d-flex justify-content-center">
-                        <button type="button" class="btn btn-outline-primary mr-3" style="border-radius: 20px; padding: 8px 20px; margin-right: 15px;" onclick="searchIllness()"><i class="fa fa-stethoscope mr-1"></i> 疾病</button>
-                        <button type="button" class="btn btn-outline-success" style="border-radius: 20px; padding: 8px 20px;" onclick="searchMedicines()"><i class="fa fa-medkit mr-1"></i> 药品</button>
+                        <button type="button" class="btn btn-outline-primary mr-3"
+                                style="border-radius: 20px; padding: 8px 20px; margin-right: 15px;"
+                                onclick="searchIllness()"><i class="fa fa-stethoscope mr-1"></i> 疾病
+                        </button>
+                        <button type="button" class="btn btn-outline-success"
+                                style="border-radius: 20px; padding: 8px 20px;" onclick="searchMedicines()"><i
+                                class="fa fa-medkit mr-1"></i> 药品
+                        </button>
                     </div>
                     <div class="form-group">
                         <a href="#" class="ct-searchForm-close">
@@ -187,16 +197,17 @@
             <div class="author-news-content text-center p-3">
                 <!-- 用户头像 -->
                 <div class="author-thumb mt-0">
-                    <img th:src="${session.loginUser.imgPath}" alt="author" style="border-radius: 50%; width: 100px; height: 100px;"/>
+                    <img th:src="${session.loginUser?.imgPath}" alt="author"
+                         style="border-radius: 50%; width: 100px; height: 100px;"/>
                 </div>
                 <!-- 用户基本信息 -->
                 <div class="author-content pt-2 p-0">
-                    <h3 class="mb-1" th:text="${session.loginUser.userName}"></h3>
+                    <h3 class="mb-1" th:text="${session.loginUser?.userName}"></h3>
                     <p class="detail">
-                        <i class="fa fa-phone"></i> [[${session.loginUser.userTel}]]
+                        <i class="fa fa-phone"></i> [[${session.loginUser?.userTel}]]
                     </p>
                     <p class="detail">
-                        <i class="fa fa-envelope-o"></i> [[${session.loginUser.userEmail}]]
+                        <i class="fa fa-envelope-o"></i> [[${session.loginUser?.userEmail}]]
                     </p>
                 </div>
             </div>
@@ -208,7 +219,7 @@
         <i class="fa fa-reorder"></i> Dashboard Navigation
     </a>
 
-    <!-- 导航菜单 -->
+    <!-- “智能医生”模块 导航菜单 -->
     <div class="dashboard-nav">
         <div class="dashboard-nav-inner">
             <ul>
@@ -224,17 +235,17 @@
 
                 <!--角色状态，1代表管理员，0普通用户-->
                 <!-- 疾病管理链接（仅管理员可见） -->
-                <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'illness' ? 'active': ''}">
+                <li th:if="${session.loginUser?.roleStatus eq 1}" th:class="${cur == 'illness' ? 'active': ''}">
                     <a href="all-illness"><i class="sl sl-icon-layers"></i> 疾病管理</a>
                 </li>
 
                 <!-- 药品管理链接（仅管理员可见） -->
-                <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'medicine' ? 'active': ''}">
+                <li th:if="${session.loginUser?.roleStatus eq 1}" th:class="${cur == 'medicine' ? 'active': ''}">
                     <a href="all-medical"><i class="sl sl-icon-layers"></i> 药品管理</a>
                 </li>
 
                 <!-- 反馈管理链接（仅管理员可见） -->
-                <li th:if="${session.loginUser.roleStatus eq 1}" th:class="${cur == 'feedback' ? 'active': ''}">
+                <li th:if="${session.loginUser?.roleStatus eq 1}" th:class="${cur == 'feedback' ? 'active': ''}">
                     <a href="all-feedback"><i class="sl sl-icon-layers"></i> 反馈管理</a>
                 </li>
 
@@ -245,6 +256,31 @@
             </ul>
         </div>
     </div>
+</div>
+
+
+<!-- 症状自检模块的侧边栏 -->
+<div id="dashboard-sidebar-2" class="dashboard-sidebar" style="background-color: #f0f8ff; color: #333;">
+    <!-- 响应式导航触发器 -->
+    <a href="#" class="dashboard-responsive-nav-trigger">
+        <i class="fa fa-reorder"></i> Dashboard Navigation
+    </a>
+
+    <!--模仿上方智能医生模块写的一个症状自检的侧边栏-->
+    <div class="dashboard-nav">
+        <div class="dashboard-nav-inner">
+            <ul>
+                <!-- 症状自检 -->
+                <li th:class="${cur == 'symptom' ? 'active': ''}">
+                    <a href="findSymptoms"><i class="sl sl-icon-envelope-open"></i> 症状自检</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</div>
+
+
 </div>
 
 </body>
