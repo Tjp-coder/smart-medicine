@@ -1,0 +1,275 @@
+/* 增强组件样式 - 补充现有的现代化主题 */
+
+/* 卡片增强样式 */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-5px);
+}
+
+.card-accent {
+  border-top: 3px solid var(--primary-color);
+}
+
+.card-accent-success {
+  border-top: 3px solid var(--success-color);
+}
+
+.card-accent-info {
+  border-top: 3px solid var(--info-color);
+}
+
+.card-accent-warning {
+  border-top: 3px solid var(--warning-color);
+}
+
+.card-accent-danger {
+  border-top: 3px solid var(--danger-color);
+}
+
+/* 按钮增强样式 */
+.btn-rounded {
+  border-radius: 50px;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+/* 表格增强样式 */
+.table-modern {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table-modern th {
+  background-color: rgba(66, 133, 244, 0.05);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.table-modern th,
+.table-modern td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.table-modern tr:last-child td {
+  border-bottom: none;
+}
+
+.table-modern tr:hover td {
+  background-color: rgba(66, 133, 244, 0.03);
+}
+
+/* 表单增强样式 */
+.form-control-modern {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--gray-300);
+  padding: 10px 15px;
+  transition: all 0.2s ease;
+  background-color: var(--light-color);
+}
+
+.form-control-modern:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+}
+
+.form-label-modern {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--gray-700);
+}
+
+/* 导航增强样式 */
+.nav-pills-modern .nav-link {
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  color: var(--gray-700);
+  transition: all 0.2s ease;
+}
+
+.nav-pills-modern .nav-link:hover {
+  background-color: rgba(66, 133, 244, 0.05);
+}
+
+.nav-pills-modern .nav-link.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 徽章增强样式 */
+.badge-soft-primary {
+  background-color: rgba(66, 133, 244, 0.15);
+  color: var(--primary-color);
+}
+
+.badge-soft-success {
+  background-color: rgba(52, 168, 83, 0.15);
+  color: var(--success-color);
+}
+
+.badge-soft-info {
+  background-color: rgba(79, 195, 247, 0.15);
+  color: var(--info-color);
+}
+
+.badge-soft-warning {
+  background-color: rgba(251, 188, 5, 0.15);
+  color: var(--warning-color);
+}
+
+.badge-soft-danger {
+  background-color: rgba(234, 67, 53, 0.15);
+  color: var(--danger-color);
+}
+
+/* 阴影辅助类 */
+.shadow-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.shadow-hover:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* 文本颜色辅助类 */
+.text-primary-light {
+  color: var(--primary-light);
+}
+
+.text-primary-dark {
+  color: var(--primary-dark);
+}
+
+/* 背景颜色辅助类 */
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+.bg-primary-dark {
+  background-color: var(--primary-dark);
+}
+
+.bg-soft-primary {
+  background-color: rgba(66, 133, 244, 0.1);
+}
+
+.bg-soft-success {
+  background-color: rgba(52, 168, 83, 0.1);
+}
+
+.bg-soft-info {
+  background-color: rgba(79, 195, 247, 0.1);
+}
+
+.bg-soft-warning {
+  background-color: rgba(251, 188, 5, 0.1);
+}
+
+.bg-soft-danger {
+  background-color: rgba(234, 67, 53, 0.1);
+}
+
+/* 边框辅助类 */
+.border-primary {
+  border-color: var(--primary-color) !important;
+}
+
+.border-success {
+  border-color: var(--success-color) !important;
+}
+
+.border-info {
+  border-color: var(--info-color) !important;
+}
+
+.border-warning {
+  border-color: var(--warning-color) !important;
+}
+
+.border-danger {
+  border-color: var(--danger-color) !important;
+}
+
+/* 动画效果 */
+.transition-base {
+  transition: var(--transition-base);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* 响应式图片 */
+.img-fluid-modern {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  transition: transform 0.3s ease;
+}
+
+.img-fluid-modern:hover {
+  transform: scale(1.02);
+}
+
+/* 暗色模式增强 */
+@media (prefers-color-scheme: dark) {
+  .dark-mode .bg-soft-primary {
+    background-color: rgba(66, 133, 244, 0.15);
+  }
+  
+  .dark-mode .bg-soft-success {
+    background-color: rgba(52, 168, 83, 0.15);
+  }
+  
+  .dark-mode .bg-soft-info {
+    background-color: rgba(79, 195, 247, 0.15);
+  }
+  
+  .dark-mode .bg-soft-warning {
+    background-color: rgba(251, 188, 5, 0.15);
+  }
+  
+  .dark-mode .bg-soft-danger {
+    background-color: rgba(234, 67, 53, 0.15);
+  }
+  
+  .dark-mode .form-control-modern {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #e0e0e0;
+  }
+  
+  .dark-mode .table-modern th {
+    background-color: rgba(66, 133, 244, 0.1);
+  }
+  
+  .dark-mode .table-modern td {
+    border-color: #333333;
+  }
+  
+  .dark-mode .table-modern tr:hover td {
+    background-color: rgba(66, 133, 244, 0.07);
+  }
+}
