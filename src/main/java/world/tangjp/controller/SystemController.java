@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import world.tangjp.constant.MedicalConstants;
 import world.tangjp.entity.*;
 import world.tangjp.utils.Assert;
@@ -12,10 +13,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 系统跳转控制器
-
+ *
  * @author Tangjp
  */
 @Api(tags = "系统管理接口")
@@ -74,10 +76,10 @@ public class SystemController extends BaseController<User> {
     /**
      * 查询相关疾病，传入kind分类参数，查找某分类的疾病
      *
-     * @param map 用于存储数据并传递给前端视图的参数容器
-     * @param kind 疾病分类的ID
+     * @param map         用于存储数据并传递给前端视图的参数容器
+     * @param kind        疾病分类的ID
      * @param illnessName 疾病名称的搜索关键字（可选）
-     * @param page 当前分页页码，默认为1
+     * @param page        当前分页页码，默认为1
      * @return 返回前端页面名称"search-illness"
      */
     @ApiOperation("查询相关疾病")
@@ -296,5 +298,32 @@ public class SystemController extends BaseController<User> {
         map.put("logs", logs);
 
         return "symptom-search";
+    }
+
+    /**
+     * 根据症状查找相关疾病
+     */
+    @ApiOperation("根据症状查找相关疾病")
+    @GetMapping("/findIllnessesBySymptomId")
+    public String findIllnessesBySymptomId(@RequestParam Integer id, Map<String, Object> map) {
+        if (loginUser == null) {
+            return "redirect:/index.html";
+        }
+        // 获取症状记录
+        SymptomLog symptom = symptomService.get(id);
+        if (symptom == null) {
+            return "redirect:/findSymptoms";
+        }
+        // 查询关联的疾病列表
+        List<Illness> illnesses = Arrays.stream(symptom.getMatchedIllnessIds().split(","))
+                .map(Integer::parseInt)
+                .map(illnessService::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        map.put("symptom", symptom);
+        map.put("illnesses", illnesses);
+
+        return "symptom-detail";
     }
 }

@@ -711,3 +711,27 @@ function deleteSymptom(id) {
     });
 }
 
+/**
+ * 查看症状详情
+ * @param id 症状记录ID
+ */
+function viewSymptomDetail(id) {
+    if (!id) {
+        layer.msg("参数错误");
+        return;
+    }
+    window.location.href = '/findIllnessesBySymptomId?id=' + id;
+}
+
+/**
+ * 查看疾病详情
+ * @param id 疾病ID
+ */
+function viewIllnessDetail(id) {
+    if (!id) {
+        layer.msg("参数错误");
+        return;
+    }
+    window.location.href = '/findIllnessOne?id=' + id;
+}
+

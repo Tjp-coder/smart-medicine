@@ -33,31 +33,6 @@ public class SymptomController extends BaseController<SymptomLog> {
         return RespResult.success("查询成功", illnesses);
     }
 
-    @GetMapping("/detail")
-    public String detail(@RequestParam Integer id, Model model) {
-        if (loginUser == null) {
-            return "redirect:/login";
-        }
-
-        // 获取症状记录
-        SymptomLog symptom = service.get(id);
-        if (symptom == null || !symptom.getUserId().equals(loginUser.getId())) {
-            return "redirect:/symptom/page";
-        }
-
-        // 查询关联的疾病列表
-        List<Illness> illnesses = Arrays.stream(symptom.getMatchedIllnessIds().split(","))
-                .map(Integer::parseInt)
-                .map(illnessService::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        model.addAttribute("symptom", symptom);
-        model.addAttribute("illnesses", illnesses);
-
-        return "symptom-detail";
-    }
-
     @ApiOperation("保存症状记录")
     @ResponseBody
     @PostMapping("/saveSymptom")
