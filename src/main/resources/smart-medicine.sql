@@ -3,34 +3,121 @@
 
  Source Server         : 本机
  Source Server Type    : MySQL
- Source Server Version : 80039 (8.0.39)
+ Source Server Version : 80041 (8.0.41)
  Source Host           : localhost:3306
  Source Schema         : smart-medicine
 
  Target Server Type    : MySQL
- Target Server Version : 80039 (8.0.39)
+ Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 06/02/2025 23:55:55
+ Date: 27/02/2025 21:28:23
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
+-- Table structure for article_favorite
+-- ----------------------------
+DROP TABLE IF EXISTS `article_favorite`;
+CREATE TABLE `article_favorite`  (
+                                     `id` int NOT NULL AUTO_INCREMENT,
+                                     `user_id` int NOT NULL,
+                                     `article_id` int NOT NULL,
+                                     `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `fk_fav_article`(`article_id` ASC) USING BTREE,
+                                     INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
+                                     INDEX `idx_user_article`(`user_id` ASC, `article_id` ASC) USING BTREE,
+                                     CONSTRAINT `fk_fav_article` FOREIGN KEY (`article_id`) REFERENCES `medical_news` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                                     CONSTRAINT `fk_fav_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_favorite
+-- ----------------------------
+INSERT INTO `article_favorite` VALUES (1, 4, 1, '2025-02-27 14:45:15');
+INSERT INTO `article_favorite` VALUES (2, 4, 2, '2025-02-27 14:45:15');
+
+-- ----------------------------
+-- Table structure for article_illness_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `article_illness_relation`;
+CREATE TABLE `article_illness_relation`  (
+                                             `id` int NOT NULL AUTO_INCREMENT,
+                                             `article_id` int NOT NULL,
+                                             `illness_id` int NOT NULL,
+                                             PRIMARY KEY (`id`) USING BTREE,
+                                             INDEX `fk_illness_article`(`article_id` ASC) USING BTREE,
+                                             INDEX `fk_illness_rel`(`illness_id` ASC) USING BTREE,
+                                             CONSTRAINT `fk_illness_article` FOREIGN KEY (`article_id`) REFERENCES `medical_news` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                                             CONSTRAINT `fk_illness_rel` FOREIGN KEY (`illness_id`) REFERENCES `illness` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_illness_relation
+-- ----------------------------
+INSERT INTO `article_illness_relation` VALUES (1, 1, 2);
+INSERT INTO `article_illness_relation` VALUES (2, 2, 13);
+
+-- ----------------------------
+-- Table structure for article_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `article_tag`;
+CREATE TABLE `article_tag`  (
+                                `id` int NOT NULL AUTO_INCREMENT,
+                                `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_tag
+-- ----------------------------
+INSERT INTO `article_tag` VALUES (1, '预防', '2025-02-27 14:45:15');
+INSERT INTO `article_tag` VALUES (2, '治疗', '2025-02-27 14:45:15');
+INSERT INTO `article_tag` VALUES (3, '营养', '2025-02-27 14:45:15');
+INSERT INTO `article_tag` VALUES (4, '中医', '2025-02-27 14:45:15');
+INSERT INTO `article_tag` VALUES (5, '儿科', '2025-02-27 14:45:15');
+
+-- ----------------------------
+-- Table structure for article_tag_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `article_tag_relation`;
+CREATE TABLE `article_tag_relation`  (
+                                         `id` int NOT NULL AUTO_INCREMENT,
+                                         `article_id` int NOT NULL,
+                                         `tag_id` int NOT NULL,
+                                         PRIMARY KEY (`id`) USING BTREE,
+                                         INDEX `idx_article_tag`(`article_id` ASC) USING BTREE,
+                                         INDEX `idx_tag_id`(`tag_id` ASC) USING BTREE,
+                                         CONSTRAINT `fk_tag_article` FOREIGN KEY (`article_id`) REFERENCES `medical_news` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                                         CONSTRAINT `fk_tag_rel` FOREIGN KEY (`tag_id`) REFERENCES `article_tag` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_tag_relation
+-- ----------------------------
+INSERT INTO `article_tag_relation` VALUES (1, 1, 1);
+INSERT INTO `article_tag_relation` VALUES (2, 1, 3);
+INSERT INTO `article_tag_relation` VALUES (3, 2, 2);
+INSERT INTO `article_tag_relation` VALUES (4, 2, 3);
+
+-- ----------------------------
 -- Table structure for feedback
 -- ----------------------------
 DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE `feedback`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `name` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '反馈用户',
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱地址',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '反馈标题',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '反馈内容',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                             `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                             `name` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '反馈用户',
+                             `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱地址',
+                             `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '反馈标题',
+                             `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '反馈内容',
+                             `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of feedback
@@ -40,20 +127,26 @@ INSERT INTO `feedback` VALUES (7, '路人乙', '31952874@qq.com', '测试二号'
 INSERT INTO `feedback` VALUES (8, 'tjp', '838219014@qq.com', '有bug咯', 'bug描述', '2024-10-28 11:03:57', '2024-10-28 11:03:57');
 INSERT INTO `feedback` VALUES (9, '游客', '333', '测试游客反馈功能标题', '测试游客反馈功能内容', '2024-10-28 11:04:44', '2024-10-28 11:04:44');
 INSERT INTO `feedback` VALUES (10, 'tjp ', '838219014@qq.com', '22', '2', '2024-12-27 00:11:34', '2024-12-27 00:11:34');
+INSERT INTO `feedback` VALUES (11, '123', '123', '123', '123', '2025-02-26 11:14:42', '2025-02-26 11:14:42');
+INSERT INTO `feedback` VALUES (12, '张三', 'zhangsan@example.com', '系统使用问题', '在使用系统时，发现保存历史记录功能无法正常工作，请尽快修复。', '2025-02-26 11:26:14', '2025-02-26 11:26:14');
+INSERT INTO `feedback` VALUES (13, '张三', 'zhangsan@example.com', '系统使用问题', '在使用系统时，发现保存历史记录功能无法正常工作，请尽快修复。', '2025-02-26 11:56:17', '2025-02-26 11:56:17');
+INSERT INTO `feedback` VALUES (14, 'DDD', 'DDD', 'DD', 'DDD', '2025-02-26 14:26:36', '2025-02-26 14:26:36');
 
 -- ----------------------------
 -- Table structure for history
 -- ----------------------------
 DROP TABLE IF EXISTS `history`;
 CREATE TABLE `history`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '用户搜索历史主键id',
-  `user_id` int NULL DEFAULT NULL COMMENT '用户ID',
-  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '搜索关键字',
-  `operate_type` int NULL DEFAULT NULL COMMENT '类型：1搜索，2科目，3药品',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 170 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                            `id` int NOT NULL AUTO_INCREMENT COMMENT '用户搜索历史主键id',
+                            `user_id` int NULL DEFAULT NULL COMMENT '用户ID',
+                            `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '搜索关键字',
+                            `operate_type` int NULL DEFAULT NULL COMMENT '类型：1搜索，2科目，3药品',
+                            `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            INDEX `fk_history_user`(`user_id` ASC) USING BTREE,
+                            CONSTRAINT `fk_history_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 188 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of history
@@ -102,22 +195,39 @@ INSERT INTO `history` VALUES (166, 4, '病毒性感冒', 2, '2024-10-28 20:18:29
 INSERT INTO `history` VALUES (167, 4, '牙周炎', 2, '2024-10-28 20:25:11', '2024-10-28 20:25:11');
 INSERT INTO `history` VALUES (168, 4, '风寒感冒', 2, '2024-12-28 00:59:08', '2024-12-28 00:59:08');
 INSERT INTO `history` VALUES (169, 4, '风寒感冒', 2, '2024-12-28 01:01:31', '2024-12-28 01:01:31');
+INSERT INTO `history` VALUES (170, 4, '风寒感冒', 2, '2025-02-14 11:13:13', '2025-02-14 11:13:13');
+INSERT INTO `history` VALUES (171, 4, '口腔溃疡', 2, '2025-02-20 23:04:14', '2025-02-20 23:04:14');
+INSERT INTO `history` VALUES (172, 4, '口腔溃疡', 2, '2025-02-22 18:33:07', '2025-02-22 18:33:07');
+INSERT INTO `history` VALUES (174, 4, '3,无', 1, '2025-02-25 21:09:38', '2025-02-25 21:09:38');
+INSERT INTO `history` VALUES (175, 4, '骨折', 2, '2025-02-25 21:09:41', '2025-02-25 21:09:41');
+INSERT INTO `history` VALUES (177, 6, '口腔溃疡', 2, '2025-02-26 11:53:24', '2025-02-26 11:53:24');
+INSERT INTO `history` VALUES (178, 6, '口腔溃疡', 2, '2025-02-26 11:53:29', '2025-02-26 11:53:29');
+INSERT INTO `history` VALUES (179, 0, '高血压', 1, '2025-02-26 13:45:28', '2025-02-27 14:39:27');
+INSERT INTO `history` VALUES (180, 6, '999', 2, '2025-02-26 14:27:59', '2025-02-26 14:27:59');
+INSERT INTO `history` VALUES (181, 6, '999感冒灵颗粒', 2, '2025-02-26 14:28:18', '2025-02-26 14:28:18');
+INSERT INTO `history` VALUES (182, 6, '感冒药', 2, '2025-02-26 14:28:43', '2025-02-26 14:28:43');
+INSERT INTO `history` VALUES (183, 6, '999感冒灵颗粒', 2, '2025-02-26 14:28:48', '2025-02-26 14:28:48');
+INSERT INTO `history` VALUES (184, 6, '开塞露', 2, '2025-02-26 14:29:07', '2025-02-26 14:29:07');
+INSERT INTO `history` VALUES (185, 6, '风寒感冒', 2, '2025-02-26 14:29:23', '2025-02-26 14:29:23');
+INSERT INTO `history` VALUES (186, 4, '口腔溃疡', 2, '2025-02-26 14:44:42', '2025-02-26 14:44:42');
 
 -- ----------------------------
 -- Table structure for illness
 -- ----------------------------
 DROP TABLE IF EXISTS `illness`;
 CREATE TABLE `illness`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '疾病id',
-  `kind_id` int NULL DEFAULT NULL COMMENT '疾病分类ID',
-  `illness_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '疾病名字',
-  `include_reason` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '诱发因素',
-  `illness_symptom` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '疾病症状',
-  `special_symptom` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '特殊症状',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                            `id` int NOT NULL AUTO_INCREMENT COMMENT '疾病id',
+                            `kind_id` int NULL DEFAULT NULL COMMENT '疾病分类ID',
+                            `illness_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '疾病名字',
+                            `include_reason` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '诱发因素',
+                            `illness_symptom` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '疾病症状',
+                            `special_symptom` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '特殊症状',
+                            `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            INDEX `fk_illness_kind`(`kind_id` ASC) USING BTREE,
+                            CONSTRAINT `fk_illness_kind` FOREIGN KEY (`kind_id`) REFERENCES `illness_kind` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of illness
@@ -132,19 +242,20 @@ INSERT INTO `illness` VALUES (8, 2, '胃溃疡', '胃溃疡是一种常见的消
 INSERT INTO `illness` VALUES (9, 17, '口腔溃疡', '口腔渍疡的致病原因尚不明确，多种因素可诱发，包括遗传因素、饮食因素、免疫因素等，且具有明显的个体差异。口腔渍疡经常、反复发作时，严重影响患者的日常生活和工作。', '口腔溃疡常见于口腔的唇、脸颊、软腭或牙龈等处的黏膜上，溃疡面一般呈圆形或椭圆形，溃疡面凹陷、有\n白色或黄色的中心、周围充血微红肿，有明显疼痛感。', '口腔溃疡常见于口腔的唇、脸颊、软腭或牙龈等处的黏膜上，溃疡面一般呈圆形或椭圆形，溃疡面凹陷、有\n白色或黄色的中心、周围充血微红肿，有明显疼痛感。', '2022-05-01 11:31:10', '2022-05-03 16:05:51');
 INSERT INTO `illness` VALUES (13, 7, '湿疹', '湿疹的病因目前尚不明确，与机体内因、外因、社会心理因素等都有关。机体内因包括免疫功能异常和系统性痪病（如内分泌痪病、营养障碍、慢性感染等）以及遗传性或获得性 皮肤屏障功能障碍。', '急性期表现为红斑、水肿、粟粒大小的丘疹、丘疱疹、水疱，糜烂及渗出；亚急性期表现为红肿和渗出减\n轻，糜烂面结痂、脱屑；慢性期主要表现为粗糙肥厚、苔藓样变。湿疹容易复发，严重影响患者的生活质\n量。', '起病较急、发病较快，瘙痒剧烈。', '2022-05-03 16:08:58', '2022-05-03 16:09:11');
 INSERT INTO `illness` VALUES (15, 17, '口腔溃疡', '上火', '口腔疼', '巨疼', '2024-12-29 11:44:41', '2024-12-29 11:44:41');
+INSERT INTO `illness` VALUES (17, 2, '123', '123', '123', '123', '2025-02-27 20:18:21', '2025-02-27 20:18:21');
 
 -- ----------------------------
 -- Table structure for illness_kind
 -- ----------------------------
 DROP TABLE IF EXISTS `illness_kind`;
 CREATE TABLE `illness_kind`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                                 `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                 `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分类名称',
+                                 `info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
+                                 `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of illness_kind
@@ -166,23 +277,25 @@ INSERT INTO `illness_kind` VALUES (17, '口腔科', '口腔科疾病', '2022-05-
 -- ----------------------------
 DROP TABLE IF EXISTS `illness_medicine`;
 CREATE TABLE `illness_medicine`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '病和药品关联id',
-  `illness_id` int NULL DEFAULT NULL COMMENT '病id',
-  `medicine_id` int NULL DEFAULT NULL COMMENT '药品id',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                                     `id` int NOT NULL AUTO_INCREMENT COMMENT '病和药品关联id',
+                                     `illness_id` int NULL DEFAULT NULL COMMENT '病id',
+                                     `medicine_id` int NULL DEFAULT NULL COMMENT '药品id',
+                                     `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     INDEX `fk_im_illness`(`illness_id` ASC) USING BTREE,
+                                     INDEX `fk_im_medicine`(`medicine_id` ASC) USING BTREE,
+                                     CONSTRAINT `fk_im_illness` FOREIGN KEY (`illness_id`) REFERENCES `illness` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                     CONSTRAINT `fk_im_medicine` FOREIGN KEY (`medicine_id`) REFERENCES `medicine` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of illness_medicine
 -- ----------------------------
 INSERT INTO `illness_medicine` VALUES (6, 3, 1, '2022-05-03 16:10:35', '2022-05-03 16:10:35');
 INSERT INTO `illness_medicine` VALUES (7, 2, 1, '2022-05-03 16:10:37', '2022-05-03 16:10:37');
-INSERT INTO `illness_medicine` VALUES (8, 1, 1, '2022-05-03 16:10:38', '2022-05-03 16:10:38');
 INSERT INTO `illness_medicine` VALUES (9, 4, 1, '2022-05-03 16:10:42', '2022-05-03 16:10:42');
 INSERT INTO `illness_medicine` VALUES (10, 7, 1, '2022-05-03 16:10:44', '2022-05-03 16:10:44');
-INSERT INTO `illness_medicine` VALUES (11, 1, 2, '2022-05-03 16:10:59', '2022-05-03 16:10:59');
 INSERT INTO `illness_medicine` VALUES (12, 2, 2, '2022-05-03 16:11:01', '2022-05-03 16:11:01');
 INSERT INTO `illness_medicine` VALUES (13, 5, 3, '2022-05-03 16:11:16', '2022-05-03 16:11:16');
 INSERT INTO `illness_medicine` VALUES (14, 13, 5, '2022-05-03 16:11:29', '2022-05-03 16:11:29');
@@ -190,29 +303,60 @@ INSERT INTO `illness_medicine` VALUES (15, 8, 4, '2022-05-03 16:11:39', '2022-05
 INSERT INTO `illness_medicine` VALUES (16, 7, 6, '2022-05-03 16:11:50', '2022-05-03 16:11:50');
 INSERT INTO `illness_medicine` VALUES (17, 4, 7, '2022-05-03 16:12:01', '2022-05-03 16:12:01');
 INSERT INTO `illness_medicine` VALUES (18, 2, 7, '2022-05-03 16:12:03', '2022-05-03 16:12:03');
-INSERT INTO `illness_medicine` VALUES (19, 1, 7, '2022-05-03 16:12:04', '2022-05-03 16:12:04');
 INSERT INTO `illness_medicine` VALUES (20, 3, 7, '2022-05-03 16:12:05', '2022-05-03 16:12:05');
+INSERT INTO `illness_medicine` VALUES (21, 5, 1, '2025-02-14 10:59:26', '2025-02-14 10:59:26');
+INSERT INTO `illness_medicine` VALUES (22, 5, 1, '2025-02-14 10:59:27', '2025-02-14 10:59:27');
+
+-- ----------------------------
+-- Table structure for medical_news
+-- ----------------------------
+DROP TABLE IF EXISTS `medical_news`;
+CREATE TABLE `medical_news`  (
+                                 `id` int NOT NULL AUTO_INCREMENT,
+                                 `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                 `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                 `author` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                 `category_id` int NOT NULL,
+                                 `cover_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                 `view_count` int NULL DEFAULT 0,
+                                 `status` tinyint NULL DEFAULT 0,
+                                 `publish_time` datetime NULL DEFAULT NULL,
+                                 `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                 `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                 PRIMARY KEY (`id`) USING BTREE,
+                                 INDEX `category_id`(`category_id` ASC) USING BTREE,
+                                 INDEX `idx_category_id`(`category_id` ASC) USING BTREE,
+                                 INDEX `idx_title`(`title` ASC) USING BTREE,
+                                 INDEX `idx_publish_time`(`publish_time` ASC) USING BTREE,
+                                 CONSTRAINT `fk_news_category` FOREIGN KEY (`category_id`) REFERENCES `news_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of medical_news
+-- ----------------------------
+INSERT INTO `medical_news` VALUES (1, '春季流感预防指南', '随着天气转暖，流感病毒活动增强。专家建议...（此处省略详细内容）', '健康时报', 1, 'https://example.com/images/flu.jpg', 0, 1, '2024-03-15 09:00:00', '2025-02-27 14:45:15', '2025-02-27 14:45:15');
+INSERT INTO `medical_news` VALUES (2, '糖尿病患者饮食管理新发现', '最新研究表明...（此处省略详细内容）', '医学研究月刊', 2, 'https://example.com/images/diabetes.jpg', 0, 1, '2024-03-20 14:30:00', '2025-02-27 14:45:15', '2025-02-27 14:45:15');
 
 -- ----------------------------
 -- Table structure for medicine
 -- ----------------------------
 DROP TABLE IF EXISTS `medicine`;
 CREATE TABLE `medicine`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '药品主键ID',
-  `medicine_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '药的名字',
-  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关键字搜索',
-  `medicine_effect` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '药的功效',
-  `medicine_brand` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '药的品牌',
-  `interaction` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '药的相互作用',
-  `taboo` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '禁忌',
-  `us_age` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '用法用量',
-  `medicine_type` int NULL DEFAULT NULL COMMENT '药的类型，0西药，1中药，2中成药',
-  `img_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '相关图片路径',
-  `medicine_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '药的价格',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                             `id` int NOT NULL AUTO_INCREMENT COMMENT '药品主键ID',
+                             `medicine_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '药的名字',
+                             `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关键字搜索',
+                             `medicine_effect` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '药的功效',
+                             `medicine_brand` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '药的品牌',
+                             `interaction` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '药的相互作用',
+                             `taboo` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '禁忌',
+                             `us_age` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '用法用量',
+                             `medicine_type` int NULL DEFAULT NULL COMMENT '药的类型，0西药，1中药，2中成药',
+                             `img_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '相关图片路径',
+                             `medicine_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '药的价格',
+                             `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of medicine
@@ -226,57 +370,132 @@ INSERT INTO `medicine` VALUES (6, '甲硝唑', '牙痛', '适应症为用于治�
 INSERT INTO `medicine` VALUES (7, '布洛芬缓释胶囊', '头疼、缓解痛', '用于缓解轻至中度疼痛如头痛、偏头痛、牙痛、痛经、关节痛、肌肉痛、神经痛，也用于普通感冒或流行性感冒引起的发热', '芬必得', '.本品与其他解热、镇痛、抗炎药物同用时可增加胃肠道不良反应，并可能导致溃疡。 2.本品与肝素、双香豆素类(如华法林)等抗凝药 同用时，可导致凝血酶原时间延长，增加出血倾向。 3.本品与地高辛、甲氨蝶呤、口服降血糖药物同用 时，能使这些药物的血药浓度增高，不宜同用。 ', '1.对其他非甾休抗炎药过敏者禁用。 2.孕妇及晡乳期妇女禁用。 3.对阿司匹林过敏的哮喘患者禁用。 4.严重肝肾功能不全者或严重心力衰竭者禁用。 5.正在服用其他含有布洛芬或其他非甾休抗炎药， 包括服用已知是特异性环氧化酶-2抑制剂药物的患者禁用。除非医生建议使用。 6.既往有与使用非甾体类抗炎药治疗相关的上消化道出血或穿孔史者禁用。 7.活动性或既往有消化性溃疡史，胃肠道出血或穿孔的患者禁用。', '口服。成人，一次1片，一日2次（早晚各一次）。', 1, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90/%E5%B8%83%E6%B4%9B%E8%8A%AC.png', 1.00, '2022-05-02 13:10:47', '2024-10-28 20:17:44');
 
 -- ----------------------------
+-- Table structure for news_category
+-- ----------------------------
+DROP TABLE IF EXISTS `news_category`;
+CREATE TABLE `news_category`  (
+                                  `id` int NOT NULL AUTO_INCREMENT,
+                                  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                  `sort_order` int NULL DEFAULT 0,
+                                  `status` tinyint NULL DEFAULT 1,
+                                  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of news_category
+-- ----------------------------
+INSERT INTO `news_category` VALUES (1, '健康资讯', '最新健康生活方式与养生知识', 0, 1, '2025-02-27 14:45:15', '2025-02-27 14:45:15');
+INSERT INTO `news_category` VALUES (2, '疾病知识', '常见疾病预防与治疗指南', 0, 1, '2025-02-27 14:45:15', '2025-02-27 14:45:15');
+INSERT INTO `news_category` VALUES (3, '医学前沿', '全球最新医学研究成果', 0, 1, '2025-02-27 14:45:15', '2025-02-27 14:45:15');
+
+-- ----------------------------
 -- Table structure for pageview
 -- ----------------------------
 DROP TABLE IF EXISTS `pageview`;
 CREATE TABLE `pageview`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `pageviews` int NULL DEFAULT NULL COMMENT '浏览量',
-  `illness_id` int NULL DEFAULT NULL COMMENT '病的id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                             `id` int NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                             `pageviews` int NULL DEFAULT NULL COMMENT '浏览量',
+                             `illness_id` int NULL DEFAULT NULL COMMENT '病的id',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             INDEX `fk_pageview_illness`(`illness_id` ASC) USING BTREE,
+                             CONSTRAINT `fk_pageview_illness` FOREIGN KEY (`illness_id`) REFERENCES `illness` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pageview
 -- ----------------------------
-INSERT INTO `pageview` VALUES (5, 6, 1);
 INSERT INTO `pageview` VALUES (6, 13, 13);
 INSERT INTO `pageview` VALUES (7, 2, 4);
-INSERT INTO `pageview` VALUES (8, 4, 2);
+INSERT INTO `pageview` VALUES (8, 6, 2);
 INSERT INTO `pageview` VALUES (9, 2, 3);
 INSERT INTO `pageview` VALUES (10, 1, 5);
-INSERT INTO `pageview` VALUES (11, 1, 6);
-INSERT INTO `pageview` VALUES (12, 3, 7);
-INSERT INTO `pageview` VALUES (13, 3, 8);
+INSERT INTO `pageview` VALUES (11, 2, 6);
+INSERT INTO `pageview` VALUES (12, 4, 7);
+INSERT INTO `pageview` VALUES (13, 4, 8);
 INSERT INTO `pageview` VALUES (14, 4, 9);
+INSERT INTO `pageview` VALUES (15, 6, 15);
+
+-- ----------------------------
+-- Table structure for symptom_log
+-- ----------------------------
+DROP TABLE IF EXISTS `symptom_log`;
+CREATE TABLE `symptom_log`  (
+                                `id` int NOT NULL AUTO_INCREMENT,
+                                `user_id` int NULL DEFAULT NULL COMMENT '游客无user_id',
+                                `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '症状关键词',
+                                `matched_illness_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '逗号分隔的疾病ID',
+                                `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                PRIMARY KEY (`id`) USING BTREE,
+                                INDEX `fk_user_id`(`user_id` ASC) USING BTREE,
+                                CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of symptom_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '用户主键id',
-  `user_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户账号',
-  `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户的真实名字',
-  `user_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码',
-  `user_age` int NULL DEFAULT NULL COMMENT '用户年龄',
-  `user_sex` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户性别',
-  `user_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户邮箱',
-  `user_tel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
-  `role_status` int NULL DEFAULT NULL COMMENT '角色状态，1管理员，0普通用户',
-  `img_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户头像',
-  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `create_time`(`create_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+                         `id` int NOT NULL AUTO_INCREMENT COMMENT '用户主键id',
+                         `user_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户账号',
+                         `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户的真实名字',
+                         `user_pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码',
+                         `user_age` int NULL DEFAULT NULL COMMENT '用户年龄',
+                         `user_sex` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户性别',
+                         `user_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户邮箱',
+                         `user_tel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
+                         `role_status` int NULL DEFAULT NULL COMMENT '角色状态，1管理员，0普通用户',
+                         `img_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户头像',
+                         `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                         `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                         `blood_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '血型',
+                         `allergy_history` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '过敏史',
+                         `height` decimal(5, 2) NULL DEFAULT NULL COMMENT '身高(cm)',
+                         `weight` decimal(5, 2) NULL DEFAULT NULL COMMENT '体重(kg)',
+                         PRIMARY KEY (`id`) USING BTREE,
+                         INDEX `create_time`(`create_time` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (4, 'admin', '管理员', '123456', 23, '男', '2678788262@qq.com', '17746678954', 1, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/4/af63959401034cecb93496b733c3f2ad.png', '2022-05-03 15:55:41', '2024-10-28 16:33:48');
-INSERT INTO `user` VALUES (5, 'zhangsan', '张三', '123456', 23, '女', 'isxuewei@qq.com', '17879544343', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/5/a0d6d6dd713b4216b0b37439d5e38144.png', '2022-05-03 16:15:53', '2024-12-28 10:53:53');
-INSERT INTO `user` VALUES (6, 'user1', 'tjp', '123456', 22, '男', '838219014@qq.com', '15372952160', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/6/3072365424324cf098e291393c398b5e.png', '2024-10-27 11:08:04', '2024-10-28 11:01:29');
-INSERT INTO `user` VALUES (7, 'user5', 'tjp', '123456', 1, '男', '838219014@qq.com', '15372952160', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/7/c1dfa01c4070425ca49fa1112a53cc5f.jpg', '2024-12-28 11:14:35', '2024-12-28 11:15:44');
+INSERT INTO `user` VALUES (4, 'admin', '管理员', '123456', 23, '男', '2678788262@qq.com', '17746678954', 1, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/4/af63959401034cecb93496b733c3f2ad.png', '2022-05-03 15:55:41', '2024-10-28 16:33:48', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (5, 'zhangsan', '张三', '123456', 23, '女', 'isxuewei@qq.com', '17879544343', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/5/a0d6d6dd713b4216b0b37439d5e38144.png', '2022-05-03 16:15:53', '2024-12-28 10:53:53', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (6, 'user1', 'tjp', '123456', 22, '男', '838219014@qq.com', '15372952160', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/6/3072365424324cf098e291393c398b5e.png', '2024-10-27 11:08:04', '2024-10-28 11:01:29', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (7, 'user5', 'tjp', '123456', 1, '男', '838219014@qq.com', '15372952160', 0, 'https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/7/c1dfa01c4070425ca49fa1112a53cc5f.jpg', '2024-12-28 11:14:35', '2024-12-28 11:15:44', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (8, 'system_user', '系统用户', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-02-27 14:39:27', '2025-02-27 14:39:27', NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- 新增症状搜索记录表（与现有表兼容）
+CREATE TABLE `symptom_log` (
+                               `id` int NOT NULL AUTO_INCREMENT,
+                               `user_id` int DEFAULT NULL COMMENT '游客无user_id',
+                               `keyword` varchar(255) NOT NULL COMMENT '症状关键词',
+                               `matched_illness_ids` varchar(255) DEFAULT NULL COMMENT '逗号分隔的疾病ID',
+                               `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+                               PRIMARY KEY (`id`),
+                               KEY `fk_user_id` (`user_id`),
+                               CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+INSERT INTO `symptom_log` VALUES
+                              (1, 4, '头痛 发热', '2,4', '2025-02-27 15:00:00'),
+                              (2, NULL, '口腔溃疡', '9,15', '2025-02-27 15:05:00'),
+                              (3, 6, '胃痛 恶心', '8', '2025-02-27 15:10:00'),
+                              (4, 5, '皮肤瘙痒', '13', '2025-02-27 15:15:00');
+
+
+
+INSERT INTO `pageview` VALUES
+                           (16, 10, 2),   -- 风寒感冒浏览量+10
+                           (17, 5, 3),    -- 扁桃体发炎浏览量+5
+                           (18, 8, 9),    -- 口腔溃疡浏览量+8
+                           (19, 3, 13);   -- 湿疹浏览量+3

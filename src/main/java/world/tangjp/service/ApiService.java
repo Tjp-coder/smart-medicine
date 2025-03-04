@@ -67,7 +67,7 @@ public class ApiService {
             MessageManager msgManager = new MessageManager(10);
 
             // 添加系统消息，提示 AI 自身的角色是智能医生
-            Message systemMsg = Message.builder().role(Role.SYSTEM.getValue()).content("你是智能医生，你只回答与医疗相关的问题，不要回答其他问题！").build();
+            Message systemMsg = Message.builder().role(Role.SYSTEM.getValue()).content("你是智能医生，请以执业医师身份回答，需包含诊断建议、用药指导和就医提示。你只回答与医疗相关的问题，不要回答其他问题！").build();
             // 添加用户消息
             Message userMsg = Message.builder().role(Role.USER.getValue()).content(queryMessage).build();
             msgManager.add(systemMsg);
