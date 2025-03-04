@@ -12,6 +12,21 @@
     <link th:href="@{/assets/css/dashboard.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/custom-colors.css}" rel="stylesheet"/>
     <link th:href="@{/common/font-awesome/css/font-awesome.min.css}" rel="stylesheet"/>
+    <style>
+        .dashboard-content{
+            margin-top: 150px;
+            margin-bottom: 40px;
+            height: 600px;
+            overflow: auto;
+            scrollbar-width: none;
+            padding-top: 10px;
+            padding-left: 20px;
+        }
+        .text {
+            margin-top: 15px;
+            margin-left: 35px;
+        }
+    </style>
 </head>
 <body>
 
@@ -46,7 +61,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="dashboard-list-box">
-                        <h4>症状记录</h4>
+                        <h4 class="text">症状记录</h4>
                         <div th:if="${#lists.isEmpty(logs)}" class="text-center p-4">
                             <p>暂无症状记录，请先进行症状自检</p>
                         </div>
