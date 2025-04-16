@@ -1,0 +1,13 @@
+.markdown-content {
+    line-height: 1.6;
+}
+.markdown-content strong {
+    font-weight: bold;
+}
+.markdown-content ul, .markdown-content ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+.markdown-content li {
+    margin-bottom: 5px;
+}

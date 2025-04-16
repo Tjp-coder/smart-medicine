@@ -19,170 +19,181 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+        <!-- Spring Boot Core 模块：核心框架和 Web 开发 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!-- 用于构建 RESTful API 和 Web 应用程序 -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <!-- 用于服务端渲染 HTML 页面 -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
             <scope>true</scope>
+            <!-- 提供热部署和开发工具 -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!-- 重复声明，包含热部署功能 -->
         </dependency>
 
-        <!-- Spring Boot Starter Test -->
+        <!-- 测试模块：单元测试和集成测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.7.11</version> <!-- Ensure this version is compatible with your Spring Boot version -->
+            <version>2.7.11</version>
             <scope>test</scope>
+            <!-- Spring Boot 测试框架 -->
         </dependency>
-
-        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+            <!-- JUnit 5 测试 API -->
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+            <!-- JUnit 5 测试引擎 -->
         </dependency>
-
-        <!-- Spring MockMultipartFile -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>5.3.30</version>
             <scope>test</scope>
+            <!-- 支持 MockMultipartFile 等测试工具 -->
         </dependency>
 
+        <!-- 数据库模块：数据库连接和 ORM -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+            <!-- MySQL 数据库驱动 -->
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.20</version>
+            <!-- 阿里巴巴 Druid 数据库连接池 -->
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.2.0</version>
+            <!-- MyBatis Plus，简化数据库操作 -->
+        </dependency>
 
+        <!-- AI 模块：人工智能和机器学习 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.9.0</version>
+            <!-- 阿里云通义千问 SDK，用于对话和文本生成 -->
+        </dependency>
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.11.0</version>
+            <!-- 百度 AI SDK，主要用于人脸识别 -->
+        </dependency>
 
-        <!--热部署依赖包 该包包含开发所需的所有工具 热部署就包含在其中-->
+        <!-- 网络通信模块：HTTP 客户端 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+            <!-- Apache HTTP 客户端，支持 AI API 调用 -->
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.10.0</version>
+            <!-- OkHttp 客户端，优化 AI 和其他 API 请求 -->
+        </dependency>
+
+        <!-- 消息服务模块：邮件和短信 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <!-- 支持发送邮件通知 -->
+        </dependency>
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+            <version>1.0.2</version>
+            <!-- 腾讯云 SMS 服务，用于短信通知 -->
         </dependency>
 
+        <!-- JSON 处理模块：JSON 序列化和反序列化 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+            <!-- FastJSON，用于处理 AI API 的 JSON 数据 -->
+        </dependency>
+
+        <!-- 文件和存储模块：文件上传和云存储 -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>2.4.0</version>
+            <!-- 阿里云 OSS，用于文件存储 -->
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+            <!-- 文件上传处理 -->
+        </dependency>
+
+        <!-- 工具库模块：通用工具和简化开发 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.7.17</version>
+            <!-- Hutool 工具库，包含字符串、HTTP 等工具 -->
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
             <version>1.16.22</version>
+            <!-- Lombok，简化 Java 代码 -->
         </dependency>
-
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Druid -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.20</version>
-        </dependency>
-
-        <!-- MyBatis Plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-
-        <!-- 邮件 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-
-        <!-- 短信 -->
-        <dependency>
-            <groupId>com.github.qcloudsms</groupId>
-            <artifactId>qcloudsms</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
-        <!-- 人脸识别 -->
-        <dependency>
-            <groupId>com.baidu.aip</groupId>
-            <artifactId>java-sdk</artifactId>
-            <version>4.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>
-
-        <!-- FastJson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <!-- Apache Commons 语言工具 -->
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.1</version>
+            <!-- Apache Commons 集合工具 -->
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.7</version>
+            <!-- Apache Commons IO 工具 -->
         </dependency>
 
-        <!--阿里云OSS服务-->
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dashscope-sdk-java</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-
-        <!--ok http client-->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.10.0</version>
-        </dependency>
-
-        <!-- Knife4j -->
+        <!-- API 文档模块：接口文档生成 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>3.0.3</version>
+            <!-- Knife4j，生成 Swagger API 文档 -->
         </dependency>
     </dependencies>
 
@@ -200,16 +211,14 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.30</version> <!-- 使用你的实际版本 -->
+                            <version>1.18.30</version>
                         </path>
-                        <!-- 其他注解处理器按需添加 -->
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--打开开关-->
                 <configuration>
                     <fork>true</fork>
                 </configuration>

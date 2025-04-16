@@ -122,36 +122,36 @@
 
 ### 系统主页
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161901298.png)
+![]()
 
 ### 搜索一下
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161903966.png)
+![]()
 
 ### 疾病百科
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161904318.png)
+![]()
 
 ### 疾病信息
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161904682.png)
+![]()
 
 ### 查找药品
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161906091.png)
+![]()
 
 ### 我的资料
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161907773.png)
+![]()
 
 ### 疾病管理
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161907612.png)
+![]()
 
 ### 药品管理
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161908434.png)
+![]()
 
 ### 智能医生
 
-![](https://xuewei-blog.oss-cn-beijing.aliyuncs.com/202312161911175.png)
+![]()

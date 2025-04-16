@@ -4455,7 +4455,7 @@ span.unread {
 }
 .message {
     background: #fff;
-    
+
 }
 .message-header {
     padding: 20px 30px;
@@ -4507,6 +4507,26 @@ p.msg {
     background: #ebf0f6;
     padding: 13px 20px;
     height: 48px;
+}
+
+.markdown-content {
+    background: #ebf0f6; /* 与 .msg 接收消息背景一致 */
+    padding: 8px;
+    display: inline-block;
+    max-width: 40%;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.5; /* 调整为与 doctor.css 接近 */
+    color: #333;
+}
+
+.markdown-content p {
+    margin: 0 0 8px 0;
+}
+
+.markdown-content a {
+    color: #007bff;
+    text-decoration: underline;
 }
 
 .add-box {

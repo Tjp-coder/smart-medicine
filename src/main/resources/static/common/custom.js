@@ -457,6 +457,51 @@ function deleteFeedback(id) {
     });
 }
 
+// /**
+//  * 初始化聊天窗口滚动条
+//  */
+// function messageInit() {
+//     let height = $("#messages")[0].scrollHeight;
+//     $("#messages").scrollTop(height);
+// }
+//
+// /**
+//  * 发送消息
+//  */
+// function send() {
+//     let message = $('#message').val();
+//     if (!message) {
+//         return;
+//     }
+//     $('#messages').append("<div class='msg-received msg-sent' style=\"margin-right: 20px\"><div class='msg-content'><p>现在</p><p class='msg'>" + message + "</p></div></div>");
+//     messageInit();
+//     $('#message').val('');
+//     $.ajax({
+//         type: "POST",
+//         url: "message/query",
+//         data: {
+//             content: message,
+//         },
+//         dataType: "json",
+//         success: function (data) {
+//             if (data['code'] === 'SUCCESS') {
+//                 message = data['message'];
+//                 $('#messages').append("<div class=\"msg-received\">\n" +
+//                     "                   <div class=\"msg-image\">\n" +
+//                     "                      <img src=\"assets/images/team/user-2.jpg\" alt=\"image\">\n" +
+//                     "                   </div>\n" +
+//                     "                   <div class=\"msg-content\">\n" +
+//                     "                      <p>现在</p>\n" +
+//                     "                      <p class=\"msg\">\n" + message +
+//                     "                      </p>\n" +
+//                     "                   </div>\n" +
+//                     "                  </div>");
+//                 messageInit();
+//             }
+//         }
+//     });
+//
+// }
 /**
  * 初始化聊天窗口滚动条
  */
@@ -473,6 +518,7 @@ function send() {
     if (!message) {
         return;
     }
+    // 显示用户消息
     $('#messages').append("<div class='msg-received msg-sent' style=\"margin-right: 20px\"><div class='msg-content'><p>现在</p><p class='msg'>" + message + "</p></div></div>");
     messageInit();
     $('#message').val('');
@@ -485,24 +531,22 @@ function send() {
         dataType: "json",
         success: function (data) {
             if (data['code'] === 'SUCCESS') {
-                message = data['message'];
+                // 使用 marked.js 解析 Markdown
+                let markdownMessage = marked.parse(data['message']);
                 $('#messages').append("<div class=\"msg-received\">\n" +
                     "                   <div class=\"msg-image\">\n" +
                     "                      <img src=\"assets/images/team/user-2.jpg\" alt=\"image\">\n" +
                     "                   </div>\n" +
                     "                   <div class=\"msg-content\">\n" +
                     "                      <p>现在</p>\n" +
-                    "                      <p class=\"msg\">\n" + message +
-                    "                      </p>\n" +
+                    "                      <div class=\"msg markdown-content\">" + markdownMessage + "</div>\n" +
                     "                   </div>\n" +
                     "                  </div>");
                 messageInit();
             }
         }
     });
-
 }
-
 
 /**
  * 搜索病
