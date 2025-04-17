@@ -1,47 +1,58 @@
 package world.tangjp.controller;
 
+import com.alibaba.dashscope.aigc.generation.GenerationResult;
+import io.reactivex.Flowable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import world.tangjp.result.RespResult;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import world.tangjp.entity.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import world.tangjp.result.RespResult;
 
-/**
- * 消息控制器
- *
- * @author Tangjp
- */
-@Api(tags = "消息管理接口")
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/message")
 public class MessageController extends BaseController<User> {
 
     /**
-     * 发送消息
+     * 发送消息并返回流式输出
      */
-    @ApiOperation(value = "发送消息", notes = "向AI助手发送消息并获取回复")
-    @PostMapping("/query")
-    public RespResult query(String content) {
-        String result = apiService.query(content);
-        return RespResult.success(result);
+    @PostMapping("/stream-query")
+    public SseEmitter streamQuery(String content) {
+        SseEmitter emitter = new SseEmitter();
+        Flowable<GenerationResult> resultFlow = apiService.streamQuery(content);
+
+        StringBuilder fullContent = new StringBuilder();
+        resultFlow.subscribe(
+                result -> {
+                    String chunk = result.getOutput().getChoices().get(0).getMessage().getContent();
+                    fullContent.append(chunk);
+                    emitter.send(SseEmitter.event().data(chunk));
+                },
+                error -> {
+                    try {
+                        emitter.send(SseEmitter.event().data("错误：" + error.getMessage()));
+                        emitter.complete();
+                    } catch (IOException e) {
+                        emitter.completeWithError(e);
+                    }
+                },
+                () -> {
+                    apiService.saveStreamResult(fullContent.toString()); // 保存完整回复
+                    emitter.complete();
+                }
+        );
+
+        return emitter;
     }
 
     /**
      * 清除对话历史
      */
-    @ApiOperation(value = "清除对话历史", notes = "清除当前会话的对话历史")
     @PostMapping("/clear-history")
     public RespResult clearHistory() {
         apiService.clearConversationHistory();
         return RespResult.success();
-    }
-
-    @ApiOperation(value = "保存消息记录", notes = "保存用户与AI的对话记录")
-    @Override
-    public RespResult save(@RequestBody User user) {
-        return super.save(user);
     }
 }

@@ -595,8 +595,63 @@ function newConversation() {
     });
 }
 
+// /**
+//  * 发送消息
+//  */
+// function send() {
+//     let message = $('#message').val();
+//     if (!message) {
+//         layer.msg("请输入内容！");
+//         return;
+//     }
+//     // 显示用户消息
+//     $('#messages').append(
+//         "<div class='msg-received msg-sent' style=\"margin-right: 20px\">" +
+//         "<div class='msg-content'>" +
+//         "<p>现在</p>" +
+//         "<p class='msg'>" + message + "</p>" +
+//         "</div></div>"
+//     );
+//     messageInit();
+//     // 保存用户消息到 localStorage
+//     saveToConversationHistory('user', message);
+//     $('#message').val('');
+//     $.ajax({
+//         type: "POST",
+//         url: "/message/query",
+//         data: {
+//             content: message
+//         },
+//         dataType: "json",
+//         success: function (data) {
+//             if (data.code === 'SUCCESS') {
+//                 let aiMessage = data.message;
+//                 let displayMessage = typeof marked !== 'undefined' ? marked.parse(aiMessage) : aiMessage;
+//                 $('#messages').append(
+//                     "<div class=\"msg-received\">" +
+//                     "<div class=\"msg-image\">" +
+//                     "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
+//                     "</div>" +
+//                     "<div class=\"msg-content\">" +
+//                     "<p>现在</p>" +
+//                     "<div class=\"msg markdown-content\">" + displayMessage + "</div>" +
+//                     "</div></div>"
+//                 );
+//                 messageInit();
+//                 // 保存 AI 回复到 localStorage
+//                 saveToConversationHistory('assistant', aiMessage);
+//             } else {
+//                 layer.msg("发送失败：" + data.message);
+//             }
+//         },
+//         error: function () {
+//             layer.msg("请求失败，请稍后再试！");
+//         }
+//     });
+// }
+
 /**
- * 发送消息
+ * 发送消息并接收流式输出
  */
 function send() {
     let message = $('#message').val();
@@ -604,6 +659,7 @@ function send() {
         layer.msg("请输入内容！");
         return;
     }
+
     // 显示用户消息
     $('#messages').append(
         "<div class='msg-received msg-sent' style=\"margin-right: 20px\">" +
@@ -613,41 +669,39 @@ function send() {
         "</div></div>"
     );
     messageInit();
-    // 保存用户消息到 localStorage
     saveToConversationHistory('user', message);
     $('#message').val('');
-    $.ajax({
-        type: "POST",
-        url: "/message/query",
-        data: {
-            content: message
-        },
-        dataType: "json",
-        success: function (data) {
-            if (data.code === 'SUCCESS') {
-                let aiMessage = data.message;
-                let displayMessage = typeof marked !== 'undefined' ? marked.parse(aiMessage) : aiMessage;
-                $('#messages').append(
-                    "<div class=\"msg-received\">" +
-                    "<div class=\"msg-image\">" +
-                    "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
-                    "</div>" +
-                    "<div class=\"msg-content\">" +
-                    "<p>现在</p>" +
-                    "<div class=\"msg markdown-content\">" + displayMessage + "</div>" +
-                    "</div></div>"
-                );
-                messageInit();
-                // 保存 AI 回复到 localStorage
-                saveToConversationHistory('assistant', aiMessage);
-            } else {
-                layer.msg("发送失败：" + data.message);
-            }
-        },
-        error: function () {
-            layer.msg("请求失败，请稍后再试！");
-        }
-    });
+
+    // 创建 AI 消息容器
+    let aiMessageDiv = $(
+        "<div class=\"msg-received\">" +
+        "<div class=\"msg-image\">" +
+        "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
+        "</div>" +
+        "<div class=\"msg-content\">" +
+        "<p>现在</p>" +
+        "<div class=\"msg markdown-content\"></div>" +
+        "</div></div>"
+    );
+    $('#messages').append(aiMessageDiv);
+    messageInit();
+
+    // 使用 EventSource 接收流式数据
+    let source = new EventSource('/message/stream-query?content=' + encodeURIComponent(message));
+    let fullContent = '';
+
+    source.onmessage = function(event) {
+        fullContent += event.data;
+        let displayMessage = typeof marked !== 'undefined' ? marked.parse(fullContent) : fullContent;
+        aiMessageDiv.find('.markdown-content').html(displayMessage);
+        messageInit();
+    };
+
+    source.onerror = function() {
+        source.close();
+        saveToConversationHistory('assistant', fullContent); // 保存完整回复
+        layer.msg("回复完成！");
+    };
 }
 
 /**
