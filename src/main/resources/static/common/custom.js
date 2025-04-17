@@ -473,6 +473,7 @@ function deleteFeedback(id) {
 //     if (!message) {
 //         return;
 //     }
+//     // 显示用户消息
 //     $('#messages').append("<div class='msg-received msg-sent' style=\"margin-right: 20px\"><div class='msg-content'><p>现在</p><p class='msg'>" + message + "</p></div></div>");
 //     messageInit();
 //     $('#message').val('');
@@ -485,22 +486,21 @@ function deleteFeedback(id) {
 //         dataType: "json",
 //         success: function (data) {
 //             if (data['code'] === 'SUCCESS') {
-//                 message = data['message'];
+//                 // 使用 marked.js 解析 Markdown
+//                 let markdownMessage = marked.parse(data['message']);
 //                 $('#messages').append("<div class=\"msg-received\">\n" +
 //                     "                   <div class=\"msg-image\">\n" +
 //                     "                      <img src=\"assets/images/team/user-2.jpg\" alt=\"image\">\n" +
 //                     "                   </div>\n" +
 //                     "                   <div class=\"msg-content\">\n" +
 //                     "                      <p>现在</p>\n" +
-//                     "                      <p class=\"msg\">\n" + message +
-//                     "                      </p>\n" +
+//                     "                      <div class=\"msg markdown-content\">" + markdownMessage + "</div>\n" +
 //                     "                   </div>\n" +
 //                     "                  </div>");
 //                 messageInit();
 //             }
 //         }
 //     });
-//
 // }
 /**
  * 初始化聊天窗口滚动条
@@ -511,43 +511,151 @@ function messageInit() {
 }
 
 /**
+ * 从 localStorage 加载对话历史并渲染
+ */
+function loadConversationHistory() {
+    let history = localStorage.getItem('conversationHistory');
+    if (history) {
+        let messages = JSON.parse(history);
+        messages.forEach(msg => {
+            if (msg.role === 'user') {
+                $('#messages').append(
+                    "<div class='msg-received msg-sent' style=\"margin-right: 20px\">" +
+                    "<div class='msg-content'>" +
+                    "<p>现在</p>" +
+                    "<p class='msg'>" + msg.content + "</p>" +
+                    "</div></div>"
+                );
+            } else if (msg.role === 'assistant') {
+                let displayMessage = typeof marked !== 'undefined' ? marked.parse(msg.content) : msg.content;
+                $('#messages').append(
+                    "<div class=\"msg-received\">" +
+                    "<div class=\"msg-image\">" +
+                    "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
+                    "</div>" +
+                    "<div class=\"msg-content\">" +
+                    "<p>现在</p>" +
+                    "<div class=\"msg markdown-content\">" + displayMessage + "</div>" +
+                    "</div></div>"
+                );
+            }
+        });
+        messageInit();
+    }
+}
+
+/**
+ * 保存消息到 localStorage
+ */
+function saveToConversationHistory(role, content) {
+    let history = localStorage.getItem('conversationHistory');
+    let messages = history ? JSON.parse(history) : [];
+    messages.push({ role: role, content: content });
+    localStorage.setItem('conversationHistory', JSON.stringify(messages));
+}
+
+/**
+ * 新建对话：清除历史并重置
+ */
+function newConversation() {
+    // 清除 localStorage 中的对话历史
+    localStorage.removeItem('conversationHistory');
+
+    // 重置消息显示区域，恢复初始欢迎消息
+    $('#messages').html(
+        "<div class=\"msg-received\">" +
+        "<div class=\"msg-image\">" +
+        "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
+        "</div>" +
+        "<div class=\"msg-content\">" +
+        "<p>现在</p>" +
+        "<p class=\"msg\">" +
+        currentUserName+"你好，我是您的智能专属医生小义，身体不舒服或者有任何需要咨询的问题，都可以向我提问，我会全心全意为您解答！" +
+        "</p>" +
+        "</div>" +
+        "</div>"
+    );
+    messageInit();
+
+    // 通知后端清除会话历史
+    $.ajax({
+        type: "POST",
+        url: "/message/clear-history",
+        dataType: "json",
+        success: function (data) {
+            if (data.code === 'SUCCESS') {
+                layer.msg("已开启新的对话！");
+            } else {
+                layer.msg("清除历史失败：" + data.message);
+            }
+        },
+        error: function () {
+            layer.msg("请求失败，请稍后再试！");
+        }
+    });
+}
+
+/**
  * 发送消息
  */
 function send() {
     let message = $('#message').val();
     if (!message) {
+        layer.msg("请输入内容！");
         return;
     }
     // 显示用户消息
-    $('#messages').append("<div class='msg-received msg-sent' style=\"margin-right: 20px\"><div class='msg-content'><p>现在</p><p class='msg'>" + message + "</p></div></div>");
+    $('#messages').append(
+        "<div class='msg-received msg-sent' style=\"margin-right: 20px\">" +
+        "<div class='msg-content'>" +
+        "<p>现在</p>" +
+        "<p class='msg'>" + message + "</p>" +
+        "</div></div>"
+    );
     messageInit();
+    // 保存用户消息到 localStorage
+    saveToConversationHistory('user', message);
     $('#message').val('');
     $.ajax({
         type: "POST",
-        url: "message/query",
+        url: "/message/query",
         data: {
-            content: message,
+            content: message
         },
         dataType: "json",
         success: function (data) {
-            if (data['code'] === 'SUCCESS') {
-                // 使用 marked.js 解析 Markdown
-                let markdownMessage = marked.parse(data['message']);
-                $('#messages').append("<div class=\"msg-received\">\n" +
-                    "                   <div class=\"msg-image\">\n" +
-                    "                      <img src=\"assets/images/team/user-2.jpg\" alt=\"image\">\n" +
-                    "                   </div>\n" +
-                    "                   <div class=\"msg-content\">\n" +
-                    "                      <p>现在</p>\n" +
-                    "                      <div class=\"msg markdown-content\">" + markdownMessage + "</div>\n" +
-                    "                   </div>\n" +
-                    "                  </div>");
+            if (data.code === 'SUCCESS') {
+                let aiMessage = data.message;
+                let displayMessage = typeof marked !== 'undefined' ? marked.parse(aiMessage) : aiMessage;
+                $('#messages').append(
+                    "<div class=\"msg-received\">" +
+                    "<div class=\"msg-image\">" +
+                    "<img src=\"assets/images/team/user-2.jpg\" alt=\"image\">" +
+                    "</div>" +
+                    "<div class=\"msg-content\">" +
+                    "<p>现在</p>" +
+                    "<div class=\"msg markdown-content\">" + displayMessage + "</div>" +
+                    "</div></div>"
+                );
                 messageInit();
+                // 保存 AI 回复到 localStorage
+                saveToConversationHistory('assistant', aiMessage);
+            } else {
+                layer.msg("发送失败：" + data.message);
             }
+        },
+        error: function () {
+            layer.msg("请求失败，请稍后再试！");
         }
     });
 }
 
+/**
+ * 页面加载时初始化
+ */
+$(document).ready(function () {
+    loadConversationHistory();
+});
 /**
  * 搜索病
  */

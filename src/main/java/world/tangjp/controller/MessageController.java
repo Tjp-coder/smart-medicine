@@ -29,6 +29,16 @@ public class MessageController extends BaseController<User> {
         return RespResult.success(result);
     }
 
+    /**
+     * 清除对话历史
+     */
+    @ApiOperation(value = "清除对话历史", notes = "清除当前会话的对话历史")
+    @PostMapping("/clear-history")
+    public RespResult clearHistory() {
+        apiService.clearConversationHistory();
+        return RespResult.success();
+    }
+
     @ApiOperation(value = "保存消息记录", notes = "保存用户与AI的对话记录")
     @Override
     public RespResult save(@RequestBody User user) {

@@ -8,9 +8,12 @@ import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.MessageManager;
 import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.utils.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +30,10 @@ public class ApiService {
     @Value("${ai-key}")
     private String apiKey;
 
+    @Autowired
+    private HttpSession session;
+
+    @Deprecated
     private static final List<String> MEDICAL_KEYWORDS = Arrays.asList(
             "病", "症状", "治疗", "药物", "健康", "医学", "诊断", "医", "手术", "护理", "药品",
             "感冒", "发烧", "咳嗽", "头痛", "疼痛", "头晕", "恶心", "过敏", "炎症", "感染",
@@ -45,44 +52,59 @@ public class ApiService {
      * 查询并返回智能医生的回答
      *
      * @param queryMessage 用户输入的问题
-     * @return 智能医生的纯文本回复内容（去除Markdown）
+     * @return 智能医生的纯文本回复内容
      */
     public String query(String queryMessage) {
-        if (!isMedicalQuery(queryMessage)) {
-            return "请提出与医疗相关的问题，我只能回答医疗领域的问题哦！";
-        }
-
         Constants.apiKey = apiKey;
 
         try {
             Generation gen = new Generation();
             MessageManager msgManager = new MessageManager(10);
 
-            Message systemMsg = Message.builder()
-                    .role(Role.SYSTEM.getValue())
-                    .content("你是智能医生，需以执业医师身份回答，提供专业诊断建议、用药指导和就医提示。回答需简洁、准确，优先使用中文，必要时引用医学知识库。仅回答医疗相关问题。")
-                    .build();
+            // 从会话中获取对话历史，如果没有则初始化
+            List<Message> conversationHistory = (List<Message>) session.getAttribute("conversationHistory");
+            if (conversationHistory == null) {
+                conversationHistory = new ArrayList<>();
+                // 添加系统消息，初始化对话
+                Message systemMsg = Message.builder()
+                        .role(Role.SYSTEM.getValue())
+                        .content("你是智能医生，需以执业医师身份回答，提供专业诊断建议、用药指导和就医提示。回答需简洁、准确，优先使用中文，必要时引用医学知识库。仅回答医疗相关问题。")
+                        .build();
+                conversationHistory.add(systemMsg);
+            }
+
+            // 添加用户的新消息
             Message userMsg = Message.builder()
                     .role(Role.USER.getValue())
                     .content(queryMessage)
                     .build();
-            msgManager.add(systemMsg);
-            msgManager.add(userMsg);
+            conversationHistory.add(userMsg);
 
+            // 将对话历史加载到消息管理器
+            for (Message msg : conversationHistory) {
+                msgManager.add(msg);
+            }
+
+            // 配置 Qwen-Turbo 参数
             QwenParam param = QwenParam.builder()
                     .model(Generation.Models.QWEN_TURBO)
                     .messages(msgManager.get())
                     .resultFormat(QwenParam.ResultFormat.MESSAGE)
                     .build();
 
+            // 调用 AI 模型并获取回复
             GenerationResult result = gen.call(param);
             GenerationOutput output = result.getOutput();
-            Message message = output.getChoices().get(0).getMessage();
+            Message aiMessage = output.getChoices().get(0).getMessage();
 
-            String plainText = message.getContent();
-            // 去除Markdown语法
-//            String plainText = removeMarkdown(message.getContent());
+            // 将 AI 回复添加到对话历史
+            conversationHistory.add(aiMessage);
 
+            // 更新会话中的对话历史
+            session.setAttribute("conversationHistory", conversationHistory);
+
+            // 返回纯文本回复
+            String plainText = aiMessage.getContent();
             return plainText;
         } catch (Exception e) {
             return "智能医生现在不在线，请稍后再试～";
@@ -90,46 +112,14 @@ public class ApiService {
     }
 
     /**
-     * 去除Markdown语法，返回纯文本
-     *
-     * @param markdownText 包含Markdown的文本
-     * @return 纯文本
+     * 清除会话中的对话历史
      */
-    private String removeMarkdown(String markdownText) {
-        if (markdownText == null) {
-            return "";
-        }
-
-        String plainText = markdownText
-                // 去除粗体和斜体 (**text** 或 *text*)
-                .replaceAll("\\*\\*(.*?)\\*\\*", "$1")
-                .replaceAll("\\*(.*?)\\*", "$1")
-                // 去除标题 (# text)
-                .replaceAll("(?m)^#+\\s*(.*)$", "$1")
-                // 去除列表符号 (- text 或 * text)
-                .replaceAll("(?m)^[\\-*]\\s*(.*)$", "$1")
-                // 去除有序列表 (1. text)
-                .replaceAll("(?m)^\\d+\\.\\s*(.*)$", "$1")
-                // 去除链接 ([text](url))
-                .replaceAll("\\[(.*?)\\]\\(.*?\\)", "$1")
-                // 去除图片 (![text](url))
-                .replaceAll("!\\[(.*?)\\]\\(.*?\\)", "$1")
-                // 去除代码块 (```text``` 或 `text`)
-                .replaceAll("```[\\s\\S]*?```", "")
-                .replaceAll("`(.*?)`", "$1")
-                // 去除引用 (> text)
-                .replaceAll("(?m)^>\\s*(.*)$", "$1")
-                // 去除多余空行
-                .replaceAll("(?m)^\\s*$\\n", "")
-                // 去除行内换行
-                .replaceAll("\\n+", " ")
-                // 去除多余空格
-                .trim();
-
-        return plainText;
+    public void clearConversationHistory() {
+        session.removeAttribute("conversationHistory");
     }
 
+    @Deprecated
     private boolean isMedicalQuery(String queryMessage) {
-        return true;
+        return MEDICAL_KEYWORDS.stream().anyMatch(queryMessage::contains);
     }
 }
