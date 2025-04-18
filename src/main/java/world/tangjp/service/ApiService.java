@@ -87,7 +87,7 @@ public class ApiService {
 
             // 配置 Qwen-Turbo 参数
             QwenParam param = QwenParam.builder()
-                    .model(Generation.Models.QWEN_TURBO)
+                    .model(Generation.Models.QWEN_PLUS)
                     .messages(msgManager.get())
                     .resultFormat(QwenParam.ResultFormat.MESSAGE)
                     .build();

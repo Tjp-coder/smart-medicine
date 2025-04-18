@@ -62,7 +62,7 @@ public class LoginController extends BaseController<User> {
         }
         // 设置用户角色状态和默认头像路径
         user.setRoleStatus(0);
-        user.setImgPath("https://moti-cloud-v2.oss-cn-beijing.aliyuncs.com/Snipaste_2022-05-01_15-37-01.png");
+        user.setImgPath("https://smart-medicine-sys.oss-cn-guangzhou.aliyuncs.com/profile/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.png");
         user = userService.save(user);
         // 将登录用户信息保存到session
         session.setAttribute("loginUser", user);
