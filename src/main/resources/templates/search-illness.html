@@ -65,8 +65,6 @@
         </div>
         <!--分页组件-->
         <div style="text-align: center" th:if="${illness.size()>0}">
-            <!--<a th:if="${page eq 1}" style="pointer-events:none;margin-right: 5px"><span>上一页</span></a>-->
-            <!--<a th:if="${page eq size}" style="pointer-events:none;margin-left: 5px"><span>下一页</span></a>-->
             <a th:href="@{findIllness(page=${page - 1})}" th:if="${page gt 1}" style="right: 5px"><span>上一页</span></a>
             <a th:href="@{findIllness(page=${page+1})}" th:if="${page ge 1 && page lt size}" style="margin-left: 5px"><span>下一页</span></a>
         </div>
